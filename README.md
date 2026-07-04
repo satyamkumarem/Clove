@@ -127,8 +127,8 @@ Clove is an Android framework that lets you build native mobile apps using simpl
 
 We welcome anyone to raise an issue, but please check the documentation and search existing entries first to ensure it's not a duplicate. Right now, we are actively looking for compatibility feedback from people testing Clove with various embedded systems and development boards.
 
-- **Get Support:** Connect on LinkedIn or email me at [me@euome.com](mailto:me@euome.com).
 - **Compatibility Feedback:** Let us know how our predefined methods perform with your specific hardware (such as an ESP32, Arduino, or Raspberry Pi).
+- **Get Support:** Connect on LinkedIn or email me at [me@euome.com](mailto:me@euome.com).
 
 ## Prompt: Teaching AI to Build Clove Dashboards
 
