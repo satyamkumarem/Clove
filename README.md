@@ -1,5 +1,18 @@
 <div align="center">
-  <img alt="clovebanner" src="https://github.com/user-attachments/assets/9678a955-59b1-464d-81c3-beda0f01dd13"  width="546"/>
+  <p>
+    <img alt="clovebanner" src="https://github.com/user-attachments/assets/9678a955-59b1-464d-81c3-beda0f01dd13"  width="546"/>
+  </p>
+  <br />
+  <p>
+    <p>
+      <a href="https://linkedin.com/in/satyamkumarem"><img src="https://img.shields.io/badge/LinkedIn-Follow-0A66C2?logo=linkedin&logoColor=white" alt="follow" /></a>
+	    <a href="https://github.com/satyamkumarem/Clove/releases"><img src="https://img.shields.io/github/v/release/satyamkumarem/Clove?color=5865F2&label=clove%20version" alt="version" /></a>
+	    <a href="https://github.com/satyamkumarem/Clove/releases"><img src="https://img.shields.io/github/downloads/satyamkumarem/Clove/total" alt="downloads" /></a>
+	    <a href="https://github.com/satyamkumarem/Clove"><img src="https://img.shields.io/badge/tests-passing-2ea44f" alt="tests" /></a>
+	    <a href="https://github.com/satyamkumarem/Clove/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/satyamkumarem/Clove?logo=github&logoColor=ffffff" /></a>
+      <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform: Android" />
+</p>
+  </p>
 </div>
 # Clove OS: Smart UI Sandbox Framework
 ### Developer Interface & API Reference Guide
