@@ -37,7 +37,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 4. **Deploy Your Dashboard:** Compress your frontend assets into a standard `.zip` file (make sure your main JavaScript entry point file is named `index.js`). Upload this zip file inside the Clove application to load your dashboard permanently.
 
 **Updating or Swapping Dashboards:** Because Clove adopts your dashboard permanently, you can clear it out to upload a new design by either clearing the app's data (`Settings > Apps > Clove > Storage > Clear Data`) or by completely reinstalling the application.
-<br />
+
 
 
 ## Predefined Methods
@@ -136,7 +136,8 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.mqtt.publish(topic, payload, options)`](#clovemqttpublish)
 * [`Clove.mqtt.subscribe(topic, callback)`](#clovemqttsubscribe)
 * [`Clove.mqtt.unsubscribe(topic)`](#clovemqttunsubscribe)
-<br />
+
+
 
 ## Contributing & Support
 
@@ -144,7 +145,8 @@ We welcome anyone to raise an issue, but please check the documentation and sear
 
 - **Compatibility Feedback:** Let us know how our predefined methods perform with your specific hardware (such as an ESP32, Arduino, or Raspberry Pi).
 - **Get Support:** Connect on LinkedIn or email me at [me@euome.com](mailto:me@euome.com).
-<br />
+
+
 
 ## Prompt: Teaching AI to Build Clove Dashboards
 
