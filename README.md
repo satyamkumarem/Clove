@@ -16,7 +16,7 @@
 	</p>
 </div>
 
-# Clove: Composable Layer for Operating Various Embedded Systems
+## Clove: Composable Layer for Operating Various Embedded Systems
 ### Developer Interface & API Reference Guide
 
 ---
