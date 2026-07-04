@@ -1,4 +1,4 @@
-<img width="3264" height="586" alt="clovebanner" src="https://github.com/user-attachments/assets/9678a955-59b1-464d-81c3-beda0f01dd13" />
+<img alt="clovebanner" src="https://github.com/user-attachments/assets/9678a955-59b1-464d-81c3-beda0f01dd13"  width="546"/>
 # Clove OS: Smart UI Sandbox Framework
 ### Developer Interface & API Reference Guide
 
