@@ -22,9 +22,20 @@
 
 Clove is an Android framework that lets you build native mobile apps using simple web code—just HTML, CSS, and JavaScript. Instead of spending months learning complex Android development with Java or Kotlin, you just build your custom interface like a basic website, load it into Clove, and the framework automatically sets up the backend and runs it like a native application. It even handles native networking by removing annoying browser blocks like CORS (which usually stop web code from talking directly to external hardware or local servers). It's an ideal environment for testing user interfaces and controlling embedded systems, with an upcoming feature that will let you bundle your final project into a standalone `.apk` file you can distribute.
 
-#### Core Features
+### Core Features
 - **AI-Assisted Dashboard Building:** You don't need to be an expert developer to get started. Clove provides a pre-configured prompt template that you can copy and paste into an AI assistant, allowing absolute beginners to generate fully functional dashboards just by describing what they need in plain English.
 - **Plug-and-Play Hardware Connectivity:** Connecting your app interface to embedded systems is incredibly easy. Clove includes ready-to-use modules that handle the low-level communication logic for Bluetooth Classic, BLE, Wi-Fi, and USB serial devices, so you can safely send and stream data with a few lines of clean JavaScript.
+
+## Installation & Setup
+
+Follow these steps to get Clove running on your Android device and deploy your custom dashboard:
+
+1. **Download the APK:** Go to the [Latest Releases](../../releases/latest) page and download the most recent `.apk` file directly to your Android device.
+2. **Install the App:** Open the downloaded file to begin installation. If prompted by Android, you will need to allow installations from **"Unknown Sources"** in your system security settings.
+3. **Grant Permissions:** Launch Clove for the first time and grant the requested system permissions so the application can properly perform its core framework functions.
+4. **Deploy Your Dashboard:** Compress your frontend assets into a standard `.zip` file (make sure your main JavaScript entry point file is named `index.js`). Upload this zip file inside the Clove application to load your dashboard permanently.
+
+> **Updating or Swapping Dashboards:** Because Clove adopts your dashboard permanently, you can clear it out to upload a new design by either clearing the app's data (`Settings > Apps > Clove > Storage > Clear Data`) or by completely reinstalling the application. **Note:** If you choose to reinstall the app, you must follow the exact same installation steps listed above from the beginning.
 
 ## Predefined Methods
 
