@@ -123,7 +123,7 @@ Clove is an Android framework that lets you build native mobile apps using simpl
 * [`Clove.mqtt.subscribe(topic, callback)`](#clovemqttsubscribe)
 * [`Clove.mqtt.unsubscribe(topic)`](#clovemqttunsubscribe)
 
-## Prompt Template
+## Prompt: Teaching AI to Build Clove Dashboards
 
 Copy and paste the prompt block below into any Large Language Model (ChatGPT, Claude, Gemini) along with your dashboard UI idea. This sets up the AI with the complete context required to generate flawless vanilla HTML/CSS/JS code that integrates directly with the Clove framework.
 
