@@ -42,21 +42,21 @@ Steps to install Clove application on your device and launch your custom dashboa
 
 ## Predefined Methods
 
-### Core & Initialization
+#### Core & Initialization
 * [`Clove.ready()`](#cloveready)
 * [`Clove.connectIoT(config, callback)`](#cloveconnectiot)
 
-### Device & Network Diagnostics
+#### Device & Network Diagnostics
 * [`Clove.device.info()`](#clovedeviceinfo)
 * [`Clove.network.status()`](#clovenetworkstatus)
 
-### Persistent State Storage
+#### Persistent State Storage
 * [`Clove.storage.get(key)`](#clovestorageget)
 * [`Clove.storage.set(key, value)`](#clovestorageset)
 * [`Clove.storage.remove(key)`](#clovestorageremove)
 * [`Clove.storage.clear()`](#clovestorageclear)
 
-### Sandboxed File System
+#### Sandboxed File System
 * [`Clove.file.write(path, data)`](#clovefilewrite)
 * [`Clove.file.read(path, options)`](#clovefileread)
 * [`Clove.file.exists(path)`](#clovefileexists)
@@ -64,7 +64,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.file.open(path, mimeType)`](#clovefileopen)
 * [`Clove.file.getAssetURL(path)`](#clovefilegetasseturl)
 
-### Enterprise HTTP Networking
+#### Enterprise HTTP Networking
 * [`Clove.http.request(options)`](#clovehttprequest)
 * [`Clove.http.get(url, options)`](#clovehttpget)
 * [`Clove.http.post(url, data, options)`](#clovehttppost)
@@ -74,14 +74,14 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.http.setHeader(host, header, value)`](#clovehttpsetheader)
 * [`Clove.http.setDataSerializer(serializer)`](#clovehttpsetdataserializer)
 
-### User Experience & Feedback
+#### User Experience & Feedback
 * [`Clove.notification.alert(msg, title, btn)`](#clovenotificationalert)
 * [`Clove.notification.confirm(msg, title, btns)`](#clovenotificationconfirm)
 * [`Clove.notification.prompt(msg, title, btns, defText)`](#clovenotificationprompt)
 * [`Clove.notification.beep(times)`](#clovenotificationbeep)
 * [`Clove.notification.vibrate(ms)`](#clovenotificationvibrate)
 
-### Bluetooth Classic Serial (SPP)
+#### Bluetooth Classic Serial (SPP)
 * [`Clove.bluetooth.list()`](#clovebluetoothlist)
 * [`Clove.bluetooth.discoverUnpaired()`](#clovebluetoothdiscoverunpaired)
 * [`Clove.bluetooth.connect(address)`](#clovebluetoothconnect)
@@ -95,7 +95,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.bluetooth.isEnabled()`](#clovebluetoothisenabled)
 * [`Clove.bluetooth.enable()`](#clovebluetoothenable)
 
-### Bluetooth Low Energy (GATT)
+#### Bluetooth Low Energy (GATT)
 * [`Clove.ble.scan(services, seconds)`](#cloveblescan)
 * [`Clove.ble.stopScan()`](#cloveblestopscan)
 * [`Clove.ble.connect(id)`](#clovebleconnect)
@@ -107,7 +107,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.ble.stopNotification(id, serviceUuid, characteristicUuid)`](#cloveblestopnotification)
 * [`Clove.ble.isEnabled()`](#clovebleisenabled)
 
-### Wi-Fi Adapter Linkages
+#### Wi-Fi Adapter Linkages
 * [`Clove.wifi.getSSID()`](#clovewifigetssid)
 * [`Clove.wifi.getIP()`](#clovewifigetip)
 * [`Clove.wifi.list()`](#clovewifilist)
@@ -115,22 +115,22 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.wifi.disconnect()`](#clovewifidisconnect)
 * [`Clove.wifi.isEnabled()`](#clovewifiisenabled)
 
-### Wired Hardware USB Serial
+#### Wired Hardware USB Serial
 * [`Clove.usb.requestPermission(options)`](#cloveusbrequestpermission)
 * [`Clove.usb.open(options)`](#cloveusbopen)
 * [`Clove.usb.close()`](#cloveusbclose)
 * [`Clove.usb.write(data)`](#cloveusbwrite)
 * [`Clove.usb.read(callback)`](#cloveusbread)
 
-### Native Media Capture
+#### Native Media Capture
 * [`Clove.camera.getPicture(options)`](#clovecameragetpicture)
 
-### Spatial Geolocation
+#### Spatial Geolocation
 * [`Clove.geolocation.getCurrentPosition(options)`](#clovegeolocationgetcurrentposition)
 * [`Clove.geolocation.watchPosition(callback, options)`](#clovegeolocationwatchposition)
 * [`Clove.geolocation.clearWatch(watchId)`](#clovegeolocationclearwatch)
 
-### MQTT Protocol Engine
+#### MQTT Protocol Engine
 * [`Clove.mqtt.connect(options)`](#clovemqttconnect)
 * [`Clove.mqtt.disconnect()`](#clovemqttdisconnect)
 * [`Clove.mqtt.publish(topic, payload, options)`](#clovemqttpublish)
