@@ -38,6 +38,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 
 **Updating or Swapping Dashboards:** Because Clove adopts your dashboard permanently, you can clear it out to upload a new design by either clearing the app's data (`Settings > Apps > Clove > Storage > Clear Data`) or by completely reinstalling the application.
 <br />
+
 ## Predefined Methods
 
 ### Core & Initialization
@@ -135,6 +136,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.mqtt.subscribe(topic, callback)`](#clovemqttsubscribe)
 * [`Clove.mqtt.unsubscribe(topic)`](#clovemqttunsubscribe)
 <br />
+
 ## Contributing & Support
 
 We welcome anyone to raise an issue, but please check the documentation and search existing entries first to ensure it's not a duplicate. Right now, we are actively looking for compatibility feedback from people testing Clove with various embedded systems and development boards.
@@ -142,6 +144,7 @@ We welcome anyone to raise an issue, but please check the documentation and sear
 - **Compatibility Feedback:** Let us know how our predefined methods perform with your specific hardware (such as an ESP32, Arduino, or Raspberry Pi).
 - **Get Support:** Connect on LinkedIn or email me at [me@euome.com](mailto:me@euome.com).
 <br />
+
 ## Prompt: Teaching AI to Build Clove Dashboards
 
 Copy and paste the prompt block below into any Large Language Model (ChatGPT, Claude, Gemini) along with your dashboard UI idea. This sets up the AI with the complete context required to generate flawless vanilla HTML/CSS/JS code that integrates directly with the Clove framework.
