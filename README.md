@@ -16,7 +16,7 @@
 	</p>
 </div>
 
-# Clove OS: Smart UI Sandbox Framework
+# Clove: Composable Layer for Operating Various Embedded Systems
 ### Developer Interface & API Reference Guide
 
 ---
