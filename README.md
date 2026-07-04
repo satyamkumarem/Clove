@@ -11,8 +11,8 @@
       <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform: Android" />
 	</p>
 	<p>
-		<a href="https://www.android.com"><img src="https://img.shields.io/badge/Powered_by-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" height="40" /></a>
-		<a href="https://euome.com"><img src="./euome-logo.png" alt="Euome" height="40" /></a>
+		<a href="https://www.android.com"><img src="https://github.com/user-attachments/assets/07a7ddc7-5ab8-46b4-b472-ec344b0d44b6" alt="Powered by Android" height="40" /></a>
+		<a href="https://euome.com"><img src="https://github.com/user-attachments/assets/0fcfb862-98a8-4680-aaf2-4b191719c54d" alt="Powered by Euome" height="40" /></a>
 	</p>
 </div>
 
