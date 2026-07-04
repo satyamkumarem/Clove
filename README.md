@@ -1,7 +1,7 @@
 <div align="center">
   <p>
     <!-- <img alt="clovebanner" src="https://github.com/user-attachments/assets/9678a955-59b1-464d-81c3-beda0f01dd13"  width="546"/> -->
-    <img alt="clovebanner" src="https://github.com/user-attachments/assets/578766fe-3987-4d89-aa7b-800bc44e8e0f  width="546"/>
+    <img alt="clovebanner" src="https://github.com/user-attachments/assets/578766fe-3987-4d89-aa7b-800bc44e8e0f" width="546"/>
 
   </p>
   <br />
