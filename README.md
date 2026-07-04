@@ -32,7 +32,7 @@ Follow these steps to get Clove running on your Android device and deploy your c
 
 1. **Download the APK:** Go to the [Latest Releases](../../releases/latest) page and download the most recent `.apk` file directly to your Android device.
 2. **Install the App:** Open the downloaded file to begin installation. If prompted by Android, you will need to allow installations from **"Unknown Sources"** in your system security settings.
-3. **Grant Permissions:** Launch Clove for the first time and grant the requested system permissions so the application can properly perform its core framework functions.
+3. **Grant Permissions:** Launch Clove for the first time and grant the requested system permissions so the application can properly perform its functions.
 4. **Deploy Your Dashboard:** Compress your frontend assets into a standard `.zip` file (make sure your main JavaScript entry point file is named `index.js`). Upload this zip file inside the Clove application to load your dashboard permanently.
 
 **Updating or Swapping Dashboards:** Because Clove adopts your dashboard permanently, you can clear it out to upload a new design by either clearing the app's data (`Settings > Apps > Clove > Storage > Clear Data`) or by completely reinstalling the application.
