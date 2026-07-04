@@ -26,13 +26,6 @@ Clove is an Android framework that lets you build native mobile apps using simpl
 - **AI-Assisted Dashboard Building:** You don't need to be an expert developer to get started. Clove provides a pre-configured prompt template that you can copy and paste into an AI assistant, allowing absolute beginners to generate fully functional dashboards just by describing what they need in plain English.
 - **Plug-and-Play Hardware Connectivity:** Connecting your app interface to embedded systems is incredibly easy. Clove includes ready-to-use modules that handle the low-level communication logic for Bluetooth Classic, BLE, Wi-Fi, and USB serial devices, so you can safely send and stream data with a few lines of clean JavaScript.
 
-## Contributing & Support
-
-We welcome anyone to raise an issue, but please check the documentation and search existing entries first to ensure it's not a duplicate. Right now, we are actively looking for compatibility feedback from people testing Clove with various embedded systems and development boards.
-
-- **Get Support:** Connect on LinkedIn or email me at [me@euome.com](mailto:me@euome.com).
-- **Compatibility Feedback:** Let us know how Clove perform with your specific hardware (such as an ESP32, Arduino, or Raspberry Pi).
-
 ## Predefined Methods
 
 ### Core & Initialization
@@ -129,6 +122,13 @@ We welcome anyone to raise an issue, but please check the documentation and sear
 * [`Clove.mqtt.publish(topic, payload, options)`](#clovemqttpublish)
 * [`Clove.mqtt.subscribe(topic, callback)`](#clovemqttsubscribe)
 * [`Clove.mqtt.unsubscribe(topic)`](#clovemqttunsubscribe)
+
+## Contributing & Support
+
+We welcome anyone to raise an issue, but please check the documentation and search existing entries first to ensure it's not a duplicate. Right now, we are actively looking for compatibility feedback from people testing Clove with various embedded systems and development boards.
+
+- **Get Support:** Connect on LinkedIn or email me at [me@euome.com](mailto:me@euome.com).
+- **Compatibility Feedback:** Let us know how Clove perform with your specific hardware (such as an ESP32, Arduino, or Raspberry Pi).
 
 ## Prompt: Teaching AI to Build Clove Dashboards
 
