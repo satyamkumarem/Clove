@@ -28,6 +28,8 @@ Clove is an Android framework that lets you build native mobile apps using simpl
 
 ## Installation & Setup
 
+Steps to install Clove application on your device and launch your custom dashboard using these steps:
+
 1. **Download the APK:** Go to the [Latest Releases](../../releases/latest) page and download the most recent `.apk` file directly to your Android device.
 2. **Install the App:** Open the downloaded file to begin installation. If prompted by Android, you will need to allow installations from **"Unknown Sources"** in your system security settings.
 3. **Grant Permissions:** Launch Clove for the first time and grant the requested system permissions so the application can properly perform its functions.
