@@ -10,6 +10,10 @@
 	    <a href="https://github.com/satyamkumarem/Clove/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/satyamkumarem/Clove?logo=github&logoColor=ffffff" /></a>
       <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform: Android" />
 	</p>
+	<p>
+		<a href="https://www.android.com"><img src="https://img.shields.io/badge/Powered_by-Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" height="40" /></a>
+		<a href="https://euome.com"><img src="./euome-logo.png" alt="Euome" height="40" /></a>
+	</p>
 </div>
 
 # Clove OS: Smart UI Sandbox Framework
