@@ -17,6 +17,7 @@
 		<a href="https://euome.com"><img src="https://github.com/user-attachments/assets/0fcfb862-98a8-4680-aaf2-4b191719c54d" alt="Powered by Euome" height="40" /></a>
 	</p>
 </div>
+<br />
 
 ## About
 
@@ -25,7 +26,7 @@ Clove is an Android framework that lets you build native mobile apps using simpl
 ### Core Features
 - **AI-Assisted Dashboard Building:** You don't need to be an expert developer to get started. Clove provides a pre-configured prompt template that you can copy and paste into an AI assistant, allowing absolute beginners to generate fully functional dashboards just by describing what they need in plain English.
 - **Plug-and-Play Hardware Connectivity:** Connecting your app interface to embedded systems is incredibly easy. Clove includes ready-to-use modules that handle the low-level communication logic for Bluetooth Classic, BLE, Wi-Fi, and USB serial devices, so you can safely send and stream data with a few lines of clean JavaScript.
-
+<br />
 ## Installation & Setup
 
 Steps to install Clove application on your device and launch your custom dashboard using these steps:
@@ -36,7 +37,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 4. **Deploy Your Dashboard:** Compress your frontend assets into a standard `.zip` file (make sure your main JavaScript entry point file is named `index.js`). Upload this zip file inside the Clove application to load your dashboard permanently.
 
 **Updating or Swapping Dashboards:** Because Clove adopts your dashboard permanently, you can clear it out to upload a new design by either clearing the app's data (`Settings > Apps > Clove > Storage > Clear Data`) or by completely reinstalling the application.
-
+<br />
 ## Predefined Methods
 
 ### Core & Initialization
@@ -133,14 +134,14 @@ Steps to install Clove application on your device and launch your custom dashboa
 * [`Clove.mqtt.publish(topic, payload, options)`](#clovemqttpublish)
 * [`Clove.mqtt.subscribe(topic, callback)`](#clovemqttsubscribe)
 * [`Clove.mqtt.unsubscribe(topic)`](#clovemqttunsubscribe)
-
+<br />
 ## Contributing & Support
 
 We welcome anyone to raise an issue, but please check the documentation and search existing entries first to ensure it's not a duplicate. Right now, we are actively looking for compatibility feedback from people testing Clove with various embedded systems and development boards.
 
 - **Compatibility Feedback:** Let us know how our predefined methods perform with your specific hardware (such as an ESP32, Arduino, or Raspberry Pi).
 - **Get Support:** Connect on LinkedIn or email me at [me@euome.com](mailto:me@euome.com).
-
+<br />
 ## Prompt: Teaching AI to Build Clove Dashboards
 
 Copy and paste the prompt block below into any Large Language Model (ChatGPT, Claude, Gemini) along with your dashboard UI idea. This sets up the AI with the complete context required to generate flawless vanilla HTML/CSS/JS code that integrates directly with the Clove framework.
