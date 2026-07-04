@@ -10,543 +10,1334 @@ The **Clove Android Application** is a client-side runtime environment engineere
 ### How the Ecosystem Works:
 1. **Custom UI Provisioning:** Developers bundle standard web assets (`index.html`, `styles.css`, JS modules, and static graphics) into a `.zip` file and upload it directly to the Clove app.
 2. **Native Abstraction Virtualization:** The app renders these assets inside a secure sandbox viewport.
-3. **Zero Native Code Required:** The runtime intercepts execution requests via the global window bridge (`window.Clove`), allowing your JavaScript to natively control hardware sensors, Bluetooth, USB serial, and file systems without writing a single line of Kotlin or Java.
+3. **Zero Native Code Required:** The runtime intercepts execution requests via the global window bridge (`window.Clove`), allowing your JavaScript to natively control hardware sensors, Bluetooth, USB serial, and file systems without writing native Android code.
 
 ---
 
-## 🔗 Interactive API Reference
+## 🔗 Interactive API Reference Index
 
-* [Framework Core Initialization](#1-framework-core-initialization)
-* [Unified IoT Gateway (Stream vs. Polling)](#2-unified-iot-gateway)
-* [Device & Network Diagnostics](#3-device--network-diagnostics)
-* [Persistent State Storage](#4-persistent-state-storage)
-* [Sandboxed File System](#5-sandboxed-file-system)
-* [Enterprise HTTP Networking](#6-enterprise-http-networking)
-* [User Experience & Feedback Modals](#7-user-experience--feedback)
-* [Bluetooth Classic Serial (SPP)](#8-bluetooth-classic-serial-spp)
-* [Bluetooth Low Energy (GATT)](#9-bluetooth-low-energy-gatt)
-* [Wi-Fi Adapter Linkages](#10-wi-fi-adapter-linkages)
-* [Wired Hardware USB Serial](#11-wired-hardware-usb-serial)
-* [Native Camera Capture](#12-native-camera-capture)
-* [Spatial Geolocation](#13-spatial-geolocation)
-* [MQTT Protocol Engine](#14-mqtt-protocol-engine)
-* [🤖 AI Developer Prompt Template](#15--ai-developer-prompt-template)
+### Core & Initialization
+* [`Clove.ready()`](#cloveready)
+* [`Clove.connectIoT(config, callback)`](#cloveconnectiot)
+
+### Device & Network Diagnostics
+* [`Clove.device.info()`](#clovedeviceinfo)
+* [`Clove.network.status()`](#clovenetworkstatus)
+
+### Persistent State Storage
+* [`Clove.storage.get(key)`](#clovestorageget)
+* [`Clove.storage.set(key, value)`](#clovestorageset)
+* [`Clove.storage.remove(key)`](#clovestorageremove)
+* [`Clove.storage.clear()`](#clovestorageclear)
+
+### Sandboxed File System
+* [`Clove.file.write(path, data)`](#clovefilewrite)
+* [`Clove.file.read(path, options)`](#clovefileread)
+* [`Clove.file.exists(path)`](#clovefileexists)
+* [`Clove.file.remove(path)`](#clovefileremove)
+* [`Clove.file.open(path, mimeType)`](#clovefileopen)
+* [`Clove.file.getAssetURL(path)`](#clovefilegetasseturl)
+
+### Enterprise HTTP Networking
+* [`Clove.http.request(options)`](#clovehttprequest)
+* [`Clove.http.get(url, options)`](#clovehttpget)
+* [`Clove.http.post(url, data, options)`](#clovehttppost)
+* [`Clove.http.put(url, data, options)`](#clovehttpput)
+* [`Clove.http.patch(url, data, options)`](#clovehttppatch)
+* [`Clove.http.delete(url, options)`](#clovehttpdelete)
+* [`Clove.http.setHeader(host, header, value)`](#clovehttpsetheader)
+* [`Clove.http.setDataSerializer(serializer)`](#clovehttpsetdataserializer)
+
+### User Experience & Feedback
+* [`Clove.notification.alert(msg, title, btn)`](#clovenotificationalert)
+* [`Clove.notification.confirm(msg, title, btns)`](#clovenotificationconfirm)
+* [`Clove.notification.prompt(msg, title, btns, defText)`](#clovenotificationprompt)
+* [`Clove.notification.beep(times)`](#clovenotificationbeep)
+* [`Clove.notification.vibrate(ms)`](#clovenotificationvibrate)
+
+### Bluetooth Classic Serial (SPP)
+* [`Clove.bluetooth.list()`](#clovebluetoothlist)
+* [`Clove.bluetooth.discoverUnpaired()`](#clovebluetoothdiscoverunpaired)
+* [`Clove.bluetooth.connect(address)`](#clovebluetoothconnect)
+* [`Clove.bluetooth.disconnect()`](#clovebluetoothdisconnect)
+* [`Clove.bluetooth.write(data)`](#clovebluetoothwrite)
+* [`Clove.bluetooth.read()`](#clovebluetoothread)
+* [`Clove.bluetooth.readUntil(delimiter)`](#clovebluetoothreaduntil)
+* [`Clove.bluetooth.subscribe(delimiter, callback)`](#clovebluetoothsubscribe)
+* [`Clove.bluetooth.unsubscribe()`](#clovebluetoothunsubscribe)
+* [`Clove.bluetooth.isConnected()`](#clovebluetoothisconnected)
+* [`Clove.bluetooth.isEnabled()`](#clovebluetoothisenabled)
+* [`Clove.bluetooth.enable()`](#clovebluetoothenable)
+
+### Bluetooth Low Energy (GATT)
+* [`Clove.ble.scan(services, seconds)`](#cloveblescan)
+* [`Clove.ble.stopScan()`](#cloveblestopscan)
+* [`Clove.ble.connect(id)`](#clovebleconnect)
+* [`Clove.ble.disconnect(id)`](#clovebledisconnect)
+* [`Clove.ble.read(id, serviceUuid, characteristicUuid)`](#clovebleread)
+* [`Clove.ble.write(id, serviceUuid, characteristicUuid, data)`](#cloveblewrite)
+* [`Clove.ble.writeWithoutResponse(id, serviceUuid, characteristicUuid, data)`](#cloveblewritewithoutresponse)
+* [`Clove.ble.startNotification(id, serviceUuid, characteristicUuid, callback)`](#cloveblestartnotification)
+* [`Clove.ble.stopNotification(id, serviceUuid, characteristicUuid)`](#cloveblestopnotification)
+* [`Clove.ble.isEnabled()`](#clovebleisenabled)
+
+### Wi-Fi Adapter Linkages
+* [`Clove.wifi.getSSID()`](#clovewifigetssid)
+* [`Clove.wifi.getIP()`](#clovewifigetip)
+* [`Clove.wifi.list()`](#clovewifilist)
+* [`Clove.wifi.connect(ssid, pass, algo, hid)`](#clovewificonnect)
+* [`Clove.wifi.disconnect()`](#clovewifidisconnect)
+* [`Clove.wifi.isEnabled()`](#clovewifiisenabled)
+
+### Wired Hardware USB Serial
+* [`Clove.usb.requestPermission(options)`](#cloveusbrequestpermission)
+* [`Clove.usb.open(options)`](#cloveusbopen)
+* [`Clove.usb.close()`](#cloveusbclose)
+* [`Clove.usb.write(data)`](#cloveusbwrite)
+* [`Clove.usb.read(callback)`](#cloveusbread)
+
+### Native Media Capture
+* [`Clove.camera.getPicture(options)`](#clovecameragetpicture)
+
+### Spatial Geolocation
+* [`Clove.geolocation.getCurrentPosition(options)`](#clovegeolocationgetcurrentposition)
+* [`Clove.geolocation.watchPosition(callback, options)`](#clovegeolocationwatchposition)
+* [`Clove.geolocation.clearWatch(watchId)`](#clovegeolocationclearwatch)
+
+### MQTT Protocol Engine
+* [`Clove.mqtt.connect(options)`](#clovemqttconnect)
+* [`Clove.mqtt.disconnect()`](#clovemqttdisconnect)
+* [`Clove.mqtt.publish(topic, payload, options)`](#clovemqttpublish)
+* [`Clove.mqtt.subscribe(topic, callback)`](#clovemqttsubscribe)
+* [`Clove.mqtt.unsubscribe(topic)`](#clovemqttunsubscribe)
 
 ---
 
-### 1. Framework Core Initialization
+## 🛠️ API Reference Detail
 
+### Core & Initialization
+
+<a name="cloveready"></a>
 #### `Clove.ready()`
-Blocks downstream JavaScript execution until the Android container environment is fully initialized and securely bound to the web view.
-
+Blocks down-stream script execution until the native Android asset hosting environment is fully online and ready.
+* **Arguments:** None
 * **Returns:** `Promise<void>`
-
 ```javascript
-// Always wrap your initialization logic inside an async DOMContentLoaded listener
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    console.log("Waiting for Clove runtime...");
+    console.log("Initializing webview bridge...");
     await window.Clove.ready();
-    console.log("Sandbox bridge online. Safe to call native APIs.");
-    
-    // Initialize your UI components here
-    initializeDashboard();
+    console.log("Clove Core API loaded successfully.");
   } catch (error) {
-    console.error("Failed to initialize Clove OS bridge:", error);
+    console.error("Initialization failed:", error);
   }
 });
 ```
 
 ---
 
-### 2. Unified IoT Gateway
-
-#### `Clove.connectIoT(config, onDataReceived)`
-An abstract pipeline gateway that automates connection lifecycles, decodes incoming binary buffers, and streams standard structured data directly to your frontend.
-
-* **Arguments:** * `config` *(Object)*: Connection topology setup.
-  * `onDataReceived` *(Function)*: Continuous stream callback `(data) => void`.
-
-##### Example: Continuous Data Streaming (Real-Time Telemetry)
+<a name="cloveconnectiot"></a>
+#### `Clove.connectIoT(config, callback)`
+A simplified high-level macro method to start automated hardware data pipelines. Handles connection lifecycles and passes parsed text chunks directly to a visual loop interface.
+* **Arguments:** * `config` *(Object)*: Configuration descriptor (`{ type: "ble" | "bluetooth" | "usb" | "mqtt" | "http", target: string, serviceUuid?: string, characteristicUuid?: string, delimiter?: string, pollInterval?: number }`)
+  * `callback` *(Function)*: Continuous listener logic loop execution function `(data) => void`.
+* **Returns:** `Promise<void>`
 ```javascript
-async function startContinuousHeartRateStream() {
+async function launchLiveDashboardStream() {
   await window.Clove.ready();
-
-  const bleConfig = {
-    type: "ble",
-    target: "AA:BB:CC:11:22:33", // MAC Address
-    serviceUuid: "180D",         // Heart Rate Service
-    characteristicUuid: "2A37"   // Heart Rate Measurement
+  
+  const pipelineConfig = {
+    type: "bluetooth",
+    target: "00:11:22:33:44:55",
+    delimiter: "\n"
   };
 
-  // This callback fires continuously every time the hardware pushes new data
-  window.Clove.connectIoT(bleConfig, (incomingTelemetry) => {
-    const heartRate = incomingTelemetry.value;
-    const timestamp = new Date().toLocaleTimeString();
-    
-    // Update live dashboard elements
-    document.getElementById("live-hr-display").innerText = `${heartRate} BPM`;
-    updateChart(timestamp, heartRate);
-  });
-}
-```
-
-##### Example: One-Time Data Polling over HTTP
-```javascript
-async function fetchServerStatusOnce() {
-  await window.Clove.ready();
-
-  const httpConfig = {
-    type: "http",
-    target: "[https://api.myiotgateway.local/status](https://api.myiotgateway.local/status)",
-    pollInterval: 0 // 0 or omitted disables continuous polling for a single fetch
-  };
-
-  window.Clove.connectIoT(httpConfig, (response) => {
-    console.log("Single snapshot snapshot received:", response);
-    document.getElementById("firmware-version").innerText = response.firmware;
+  await window.Clove.connectIoT(pipelineConfig, (incomingPacket) => {
+    console.log("Continuous Stream Packet received:", incomingPacket);
+    document.getElementById("sensor-readout").innerText = incomingPacket;
   });
 }
 ```
 
 ---
 
-### 3. Device & Network Diagnostics
+### Device & Network Diagnostics
 
-#### `Clove.device.info()` & `Clove.network.status()`
-Retrieves hardware specs and inspects active network connectivity before running heavy operations.
-
+<a name="clovedeviceinfo"></a>
+#### `Clove.device.info()`
+Queries details about the underlying host Android device operating system hardware layer.
+* **Arguments:** None
+* **Returns:** `Promise<Object>` containing `{ manufacturer: string, model: string, platform: string, version: string, uuid: string }`
 ```javascript
-async function performSystemDiagnostics() {
+async function logSystemSpecs() {
   await window.Clove.ready();
+  try {
+    const specs = await window.Clove.device.info();
+    console.log(`Device hardware verified: ${specs.manufacturer} ${specs.model} running Android OS ${specs.version}`);
+  } catch (err) {
+    console.error("Unable to query hardware specs:", err);
+  }
+}
+```
 
-  // 1. Fetch hardware details (One-time read)
-  const deviceInfo = await window.Clove.device.info();
-  console.log(`App running on: ${deviceInfo.manufacturer} ${deviceInfo.model} (${deviceInfo.platform})`);
+---
 
-  // 2. Check network readiness before sending telemetry
-  const netStatus = await window.Clove.network.status();
+<a name="clovenetworkstatus"></a>
+#### `Clove.network.status()`
+Inspects the current internet state and hardware interface route mapping layout.
+* **Arguments:** None
+* **Returns:** `Promise<Object>` containing `{ online: boolean, type: string }`
+```javascript
+async function checkNetworkBeforeSync() {
+  await window.Clove.ready();
+  const net = await window.Clove.network.status();
   
-  if (netStatus.online) {
-    console.log(`Connected via ${netStatus.type}. Syncing data...`);
-    syncLocalLogsToServer();
+  if (net.online) {
+    console.log(`Network status confirmed online via link style: ${net.type}`);
   } else {
-    console.warn("Device offline. Caching data locally.");
-    showOfflineBanner();
+    console.warn("Device is running completely offline.");
   }
 }
 ```
 
 ---
 
-### 4. Persistent State Storage
+### Persistent State Storage
 
-#### `Clove.storage.get(key)` / `.set(key, value)` / `.remove(key)` / `.clear()`
-Persists data across app restarts. Automatically handles JSON serialization and deserialization for arrays and objects.
-
+<a name="clovestorageget"></a>
+#### `Clove.storage.get(key)`
+Retrieves a matching key record variable value directly out of secure long-term client sandbox tracking structures.
+* **Arguments:** `key` *(String)*
+* **Returns:** `Promise<any>`
 ```javascript
-async function manageUserPreferences() {
+async function loadSavedCredentials() {
   await window.Clove.ready();
-
-  const defaultSettings = {
-    theme: "dark",
-    telemetryRate: 1000,
-    autoConnect: true
-  };
-
-  // Save complex object (One-time write)
-  await window.Clove.storage.set("app_settings", defaultSettings);
-
-  // Retrieve data later (One-time read)
-  const savedSettings = await window.Clove.storage.get("app_settings");
-  
-  if (savedSettings && savedSettings.theme === "dark") {
-    document.body.classList.add("dark-mode");
+  const savedToken = await window.Clove.storage.get("auth_token");
+  if (savedToken) {
+    console.log("Authorization security token restored successfully.");
   }
 }
 ```
 
 ---
 
-### 5. Sandboxed File System
-
-#### `Clove.file.write()` / `.read()` / `.exists()` / `.remove()` / `.open()`
-Provides full CRUD access to a private local directory for saving logs, CSV exports, or caching configurations.
-
+<a name="clovestorageset"></a>
+#### `Clove.storage.set(key, value)`
+Saves key/value variable parameters safely across application reboots. Automatically parses layout arrays or objects to string sets.
+* **Arguments:** `key` *(String)*, `value` *(any)*
+* **Returns:** `Promise<void>`
 ```javascript
-async function exportTelemetryLog(logArray) {
+async function saveDashboardState() {
   await window.Clove.ready();
-  const filePath = "exports/session_log.json";
-
-  // Check if file exists
-  const exists = await window.Clove.file.exists(filePath);
-  if (exists) {
-    console.log("Overwriting previous session log...");
-  }
-
-  // Write structured data directly to disk
-  await window.Clove.file.write(filePath, {
-    exportDate: new Date().toISOString(),
-    recordCount: logArray.length,
-    data: logArray
-  });
-
-  // Read it back to verify contents
-  const verifiedFile = await window.Clove.file.read(filePath, { mode: "json" });
-  console.log(`Successfully verified ${verifiedFile.recordCount} records on disk.`);
-
-  // Prompt Android to open the file using system apps
-  await window.Clove.file.open(filePath, "application/json");
+  const runtimeConfig = { theme: "cyberpunk", telemetryInterval: 250 };
+  await window.Clove.storage.set("dashboard_prefs", runtimeConfig);
+  console.log("User preferences serialized and saved.");
 }
 ```
 
 ---
 
-### 6. Enterprise HTTP Networking
+<a name="clovestorageremove"></a>
+#### `Clove.storage.remove(key)`
+Clears structural data references containing targeted tracking configuration keywords.
+* **Arguments:** `key` *(String)*
+* **Returns:** `Promise<void>`
+```javascript
+async function purgeCachedSession() {
+  await window.Clove.ready();
+  await window.Clove.storage.remove("dashboard_prefs");
+  console.log("Specified storage key mapping has been deleted.");
+}
+```
 
+---
+
+<a name="clovestorageclear"></a>
+#### `Clove.storage.clear()`
+Wipes out all records within the local scope data ecosystem space.
+* **Arguments:** None
+* **Returns:** `Promise<void>`
+```javascript
+async function factoryResetLocalStorage() {
+  await window.Clove.ready();
+  await window.Clove.storage.clear();
+  console.log("All sandbox key/value maps have been reset.");
+}
+```
+
+---
+
+### Sandboxed File System
+
+<a name="clovefilewrite"></a>
+#### `Clove.file.write(path, data)`
+Saves raw string data lines or configuration sheets directly onto internal app-allocated media storage routes.
+* **Arguments:** `path` *(String)*, `data` *(String | Object)*
+* **Returns:** `Promise<any>`
+```javascript
+async function writeLogToDisk() {
+  await window.Clove.ready();
+  const reportPayload = { systemCode: "OK", updates: ["Sensors armed", "Batteries full"] };
+  await window.Clove.file.write("diagnostics/daily_report.json", reportPayload);
+  console.log("Log write operation completed cleanly.");
+}
+```
+
+---
+
+<a name="clovefileread"></a>
+#### `Clove.file.read(path, options)`
+Loads stored layout files. Automatically attempts to parse formatting arrays or string configurations matching `.json` suffixes.
+* **Arguments:** `path` *(String)*, `options` *(Object)* *(Optional: `{ mode: "text" | "json" }`)*
+* **Returns:** `Promise<any>`
+```javascript
+async function verifyDiskReport() {
+  await window.Clove.ready();
+  try {
+    const reportData = await window.Clove.file.read("diagnostics/daily_report.json", { mode: "json" });
+    console.log("Read complete. System Code details:", reportData.systemCode);
+  } catch (err) {
+    console.error("Error reading file path targets:", err);
+  }
+}
+```
+
+---
+
+<a name="clovefileexists"></a>
+#### `Clove.file.exists(path)`
+Verifies specific storage space routing indices before initiating operational system reads.
+* **Arguments:** `path` *(String)*
+* **Returns:** `Promise<Boolean>`
+```javascript
+async function safeLoadAsset() {
+  await window.Clove.ready();
+  const fileFound = await window.Clove.file.exists("diagnostics/daily_report.json");
+  if (fileFound) {
+    console.log("Target resource paths mapped properly on storage disks.");
+  }
+}
+```
+
+---
+
+<a name="clovefileremove"></a>
+#### `Clove.file.remove(path)`
+Removes specified sandboxed assets cleanly from local target directories.
+* **Arguments:** `path` *(String)*
+* **Returns:** `Promise<any>`
+```javascript
+async function cleanOldTelemetry() {
+  await window.Clove.ready();
+  await window.Clove.file.remove("diagnostics/daily_report.json");
+  console.log("Target disk asset removed permanently.");
+}
+```
+
+---
+
+<a name="clovefileopen"></a>
+#### `Clove.file.open(path, mimeType)`
+Launches native system execution handles to open or view local reports outside the sandboxed web dashboard context.
+* **Arguments:** `path` *(String)*, `mimeType` *(String)*
+* **Returns:** `Promise<any>`
+```javascript
+async function triggerSystemPdfViewer() {
+  await window.Clove.ready();
+  await window.Clove.file.open("exports/schematic.pdf", "application/pdf");
+  console.log("Native intent document handover triggered.");
+}
+```
+
+---
+
+<a name="clovefilegetasseturl"></a>
+#### `Clove.file.getAssetURL(path)`
+Transforms sandboxed file data references into web-safe asset URLs suitable for rendering inside DOM structures.
+* **Arguments:** `path` *(String)*
+* **Returns:** `Promise<String>`
+```javascript
+async function displayCapturedFrame() {
+  await window.Clove.ready();
+  const rawPath = "snapshots/node_view.jpg";
+  const webSafeUrl = await window.Clove.file.getAssetURL(rawPath);
+  document.getElementById("node-image-view").src = webSafeUrl;
+}
+```
+
+---
+
+### Enterprise HTTP Networking
+
+<a name="clovehttprequest"></a>
 #### `Clove.http.request(options)`
-Routes API calls through the native OS layer, bypassing browser Cross-Origin Resource Sharing (CORS) blocks completely.
-
+Passes API requests straight through native OS interface modules, bypassing browser CORS protection filters completely.
+* **Arguments:** `options` *(Object)* containing `{ method: string, url: string, data?: any, headers?: any }`
+* **Returns:** `Promise<Object>` containing `{ ok: boolean, status: number, body: any, headers: any }`
 ```javascript
-async function postSensorSnapshot(sensorPayload) {
+async function queryCustomBackend() {
   await window.Clove.ready();
+  const networkParams = {
+    method: "POST",
+    url: "[https://api.external-cloud-node.net/v1/ingest](https://api.external-cloud-node.net/v1/ingest)",
+    data: { dataTimestamp: Date.now(), coreReading: 404 }
+  };
+  const res = await window.Clove.http.request(networkParams);
+  console.log(`Response received with status code flag: ${res.status}`);
+}
+```
 
-  // Configure global authentication header first
-  await window.Clove.http.setHeader("api.cloud-iot.com", "Authorization", "Bearer token_xyz123");
-  await window.Clove.http.setDataSerializer("json");
+---
 
-  try {
-    const response = await window.Clove.http.post(
-      "[https://api.cloud-iot.com/v1/telemetry](https://api.cloud-iot.com/v1/telemetry)",
-      {
-        deviceId: "NODE-883",
-        batteryLevel: 88,
-        readings: sensorPayload
-      }
-    );
-
-    if (response.ok) {
-      console.log("Payload accepted by server:", response.body);
-    } else {
-      console.error(`Server rejected request: HTTP ${response.status}`);
-    }
-  } catch (err) {
-    console.error("Native HTTP transmission failed:", err);
+<a name="clovehttpget"></a>
+#### `Clove.http.get(url, options)`
+Shorthand alternative implementation to process a targeted HTTP GET request.
+* **Arguments:** `url` *(String)*, `options` *(Object)* *(Optional metadata configuration blocks)*
+* **Returns:** `Promise<Object>`
+```javascript
+async function fetchConfigPayload() {
+  await window.Clove.ready();
+  const res = await window.Clove.http.get("[https://api.clove.io/presets](https://api.clove.io/presets)", {});
+  if (res.ok) {
+    console.log("Configuration parameters matched:", res.body);
   }
 }
 ```
 
 ---
 
-### 7. User Experience & Feedback
-
-#### `Clove.notification.alert()` / `.confirm()` / `.prompt()` / `.vibrate()`
-Triggers native OS modals and haptic vibration motors.
-
+<a name="clovehttppost"></a>
+#### `Clove.http.post(url, data, options)`
+Shorthand alternative implementation to process a targeted HTTP POST request.
+* **Arguments:** `url` *(String)*, `data` *(Object)*, `options` *(Object)*
+* **Returns:** `Promise<Object>`
 ```javascript
-async function executeDestructiveAction() {
+async function transmitNodeHeartbeat() {
   await window.Clove.ready();
+  const res = await window.Clove.http.post("[https://api.clove.io/heartbeat](https://api.clove.io/heartbeat)", { status: "active" }, {});
+  console.log(`Post response matching status flags: ${res.status}`);
+}
+```
 
-  // 1. Trigger tactile haptic feedback to get user attention
-  await window.Clove.notification.vibrate(200);
+---
 
-  // 2. Show native confirmation dialog
-  const userChoice = await window.Clove.notification.confirm(
-    "Are you sure you want to format the external sensor flash memory? This cannot be undone.",
-    "Hardware Warning",
-    ["Format Memory", "Cancel"]
+<a name="clovehttpput"></a>
+#### `Clove.http.put(url, data, options)`
+Shorthand alternative implementation to process a targeted HTTP PUT data request.
+* **Arguments:** `url` *(String)*, `data` *(Object)*, `options` *(Object)*
+* **Returns:** `Promise<Object>`
+```javascript
+async function updateServerAsset() {
+  await window.Clove.ready();
+  const res = await window.Clove.http.put("[https://api.clove.io/device/0](https://api.clove.io/device/0)", { name: "Primary Node" }, {});
+  console.log(`Put asset operation returned code: ${res.status}`);
+}
+```
+
+---
+
+<a name="clovehttppatch"></a>
+#### `Clove.http.patch(url, data, options)`
+Shorthand alternative implementation to process a targeted HTTP PATCH request.
+* **Arguments:** `url` *(String)*, `data` *(Object)*, `options` *(Object)*
+* **Returns:** `Promise<Object>`
+```javascript
+async function patchServerParam() {
+  await window.Clove.ready();
+  const res = await window.Clove.http.patch("[https://api.clove.io/device/0](https://api.clove.io/device/0)", { status: "standby" }, {});
+  console.log(`Patch update code verified: ${res.status}`);
+}
+```
+
+---
+
+<a name="clovehttpdelete"></a>
+#### `Clove.http.delete(url, options)`
+Shorthand alternative implementation to process a targeted HTTP DELETE verification request.
+* **Arguments:** `url` *(String)*, `options` *(Object)*
+* **Returns:** `Promise<Object>`
+```javascript
+async function deleteStaleDevice() {
+  await window.Clove.ready();
+  const res = await window.Clove.http.delete("[https://api.clove.io/device/old](https://api.clove.io/device/old)", {});
+  console.log(`Deletion response confirmed: ${res.status}`);
+}
+```
+
+---
+
+<a name="clovehttpsetheader"></a>
+#### `Clove.http.setHeader(host, header, value)`
+Registers default global headers for outgoing remote server pipeline calls.
+* **Arguments:** `host` *(String)*, `header` *(String)*, `value` *(String)*
+* **Returns:** `Promise<void>`
+```javascript
+async function injectStickySecurityToken() {
+  await window.Clove.ready();
+  await window.Clove.http.setHeader("api.clove.io", "X-Custom-Client-Auth", "SecureKey_99182");
+  console.log("Global authentication header bound to target host layer.");
+}
+```
+
+---
+
+<a name="clovehttpsetdataserializer"></a>
+#### `Clove.http.setDataSerializer(serializer)`
+Updates underlying framework encoding rules for outgoing web requests.
+* **Arguments:** `serializer` *(String)* — `"json" | "urlencoded" | "utf8" | "multipart"`
+* **Returns:** `Promise<void>`
+```javascript
+async function changeSerializerFormatting() {
+  await window.Clove.ready();
+  await window.Clove.http.setDataSerializer("urlencoded");
+  console.log("Outgoing transmission encoding rules changed to urlencoded standard formatting.");
+}
+```
+
+---
+
+### User Experience & Feedback
+
+<a name="clovenotificationalert"></a>
+#### `Clove.notification.alert(msg, title, btn)`
+Launches native hardware-styled workspace warning popups with built-in runtime fallback loops.
+* **Arguments:** `msg` *(String)*, `title` *(String)*, `btn` *(String)*
+* **Returns:** `Promise<void>`
+```javascript
+async function notifySystemOverload() {
+  await window.Clove.ready();
+  await window.Clove.notification.alert(
+    "Critical core temperature threshold exceeded!", 
+    "Hardware Alarm", 
+    "Acknowledge Danger"
   );
+  console.log("User verified reading data warning alert wrapper popup layout.");
+}
+```
 
-  // Index 1 matches "Format Memory"
-  if (userChoice === 1) {
-    // 3. Prompt for confirmation security PIN
-    const pinDialog = await window.Clove.notification.prompt(
-      "Enter Admin PIN to confirm:",
-      "Security Auth",
-      ["Submit", "Cancel"],
-      ""
-    );
+---
 
-    if (pinDialog.buttonIndex === 1 && pinDialog.input1 === "1234") {
-      await window.Clove.notification.alert("Flash memory formatted successfully.", "Success", "OK");
-    }
+<a name="clovenotificationconfirm"></a>
+#### `Clove.notification.confirm(msg, title, btns)`
+Displays operational validation request paths with up to three distinct button selection markers.
+* **Arguments:** `msg` *(String)*, `title` *(String)*, `btns` *(Array<String>)*
+* **Returns:** `Promise<Number>` *(Returns 1-based index matching selected button position element arrays)*
+```javascript
+async function queryFirmwareFlash() {
+  await window.Clove.ready();
+  const responseIndex = await window.Clove.notification.confirm(
+    "Proceed with updating the target controller firmware stack configuration?",
+    "System Update",
+    ["Begin Flash", "Abort Process"]
+  );
+  if (responseIndex === 1) {
+    console.log("User authorized process path execution initialization routines.");
   }
 }
 ```
 
 ---
 
-### 8. Bluetooth Classic Serial (SPP)
-
-#### One-Time Command & Read vs. Continuous Subscription
-Bluetooth Classic (RFCOMM) is widely used by Arduino, ESP32, and legacy serial modules. You can query data once or subscribe to a continuous stream.
-
+<a name="clovenotificationprompt"></a>
+#### `Clove.notification.prompt(msg, title, btns, defText)`
+Launches native textual input capturing dialog panels.
+* **Arguments:** `msg` *(String)*, `title` *(String)*, `btns` *(Array<String>)*, `defText` *(String)*
+* **Returns:** `Promise<Object>` containing `{ buttonIndex: number, input1: string }`
 ```javascript
-const SPP_MAC = "00:11:22:33:44:55";
-
-// PATTERN A: One-Time Data Fetch (e.g., Querying device battery or config)
-async function getFirmwareVersionOnce() {
+async function captureDeviceAlias() {
   await window.Clove.ready();
-  
-  if (!await window.Clove.bluetooth.isConnected()) {
-    await window.Clove.bluetooth.connect(SPP_MAC);
+  const inputResult = await window.Clove.notification.prompt(
+    "Please specify a localized deployment label index for this node asset:",
+    "Device Setup",
+    ["Assign", "Keep Default"],
+    "Node-Alpha"
+  );
+  if (inputResult.buttonIndex === 1) {
+    console.log(`User mapped configuration target label to entry: ${inputResult.input1}`);
   }
-
-  // Send request command to serial module
-  await window.Clove.bluetooth.write("GET_FIRMWARE_VER\n");
-
-  // Wait and read once until new line character arrives
-  const versionString = await window.Clove.bluetooth.readUntil("\n");
-  console.log("Firmware Version snapshot:", versionString.trim());
 }
+```
 
-// PATTERN B: Continuous Reading (e.g., Live sensor stream coming at 10Hz)
-async function startSerialLiveStream() {
+---
+
+<a name="clovenotificationbeep"></a>
+#### `Clove.notification.beep(times)`
+Triggers physical audio diagnostic alerting chirps directly via native system speakers.
+* **Arguments:** `times` *(Number)*
+* **Returns:** `Promise<void>`
+```javascript
+async function chirpOnCompletion() {
   await window.Clove.ready();
-  
-  if (!await window.Clove.bluetooth.isConnected()) {
-    await window.Clove.bluetooth.connect(SPP_MAC);
-  }
+  console.log("Sound alert triggered.");
+  await window.Clove.notification.beep(2);
+}
+```
 
-  console.log("Subscribing to serial stream...");
-  
-  // Attach a persistent listener that fires every time a newline '\n' is received
-  await window.Clove.bluetooth.subscribe("\n", (rawLine) => {
-    const cleanData = rawLine.trim();
-    console.log("Live stream packet:", cleanData);
-    
-    // Parse incoming CSV: e.g., "TEMP:24.5,HUM:55"
-    const parts = cleanData.split(",");
-    document.getElementById("temp-readout").innerText = parts[0];
+---
+
+<a name="clovenotificationvibrate"></a>
+#### `Clove.notification.vibrate(ms)`
+Triggers physical haptic vibration pulses via device motor configurations.
+* **Arguments:** `ms` *(Number)*
+* **Returns:** `Promise<void>`
+```javascript
+async function pulseHapticWarning() {
+  await window.Clove.ready();
+  console.log("Pulsing hardware haptic motor array layers.");
+  await window.Clove.notification.vibrate(450);
+}
+```
+
+---
+
+### Bluetooth Classic Serial (SPP)
+
+<a name="clovebluetoothlist"></a>
+#### `Clove.bluetooth.list()`
+Maps established system-paired hardware peripheral devices matching standard legacy RFCOMM signatures.
+* **Arguments:** None
+* **Returns:** `Promise<Array<Object>>` containing list entries with `{ name: string, address: string, id: string, class: number }`
+```javascript
+async function scanPairedHardware() {
+  await window.Clove.ready();
+  const pairings = await window.Clove.bluetooth.list();
+  pairings.forEach(dev => {
+    console.log(`Paired connection entry target found: ${dev.name} [MAC: ${dev.address}]`);
   });
 }
 ```
 
 ---
 
-### 9. Bluetooth Low Energy (GATT)
-
-#### One-Time Characteristic Read vs. Continuous Notifications
-BLE communicates via Services and Characteristics. Use `.read()` for snapshots and `.startNotification()` for real-time sensor updates.
-
+<a name="clovebluetoothdiscoverunpaired"></a>
+#### `Clove.bluetooth.discoverUnpaired()`
+Initiates an environmental radio discoverability scan for unbonded legacy endpoints.
+* **Arguments:** None
+* **Returns:** `Promise<Array<Object>>`
 ```javascript
-const BLE_MAC = "F3:D2:C1:00:AA:BB";
-const ENV_SERVICE = "181A";
-const TEMP_CHAR = "2A6E";
-
-// PATTERN A: One-Time Read Snapshot
-async function readTemperatureOnce() {
+async function searchForNewLegacyDevices() {
   await window.Clove.ready();
-  await window.Clove.ble.connect(BLE_MAC);
-
-  // Read binary ArrayBuffer once from GATT server
-  const rawBuffer = await window.Clove.ble.read(BLE_MAC, ENV_SERVICE, TEMP_CHAR);
-  
-  // Decode raw byte buffer (e.g., 16-bit integer divided by 100)
-  const dataView = new DataView(rawBuffer);
-  const tempCelsius = dataView.getInt16(0, true) / 100;
-  
-  console.log("Snapshot Temperature Read:", tempCelsius, "°C");
-}
-
-// PATTERN B: Continuous Live Notifications
-async function subscribeToLiveTemperature() {
-  await window.Clove.ready();
-  await window.Clove.ble.connect(BLE_MAC);
-
-  console.log("Enabling GATT Notifications...");
-
-  // Instruct native BLE radio to stream updates to callback function
-  await window.Clove.ble.startNotification(BLE_MAC, ENV_SERVICE, TEMP_CHAR, (rawBuffer) => {
-    const dataView = new DataView(rawBuffer);
-    const liveTemp = dataView.getInt16(0, true) / 100;
-    
-    // Update dashboard gauge in real time
-    document.getElementById("temp-gauge").setAttribute("data-value", liveTemp);
-  });
+  console.log("Starting 10-second classic environmental discovery scan...");
+  const newDevices = await window.Clove.bluetooth.discoverUnpaired();
+  console.log(`Discovered ${newDevices.length} unbonded classic endpoints nearby.`);
 }
 ```
 
 ---
 
-### 10. Wi-Fi Adapter Linkages
-
-#### `Clove.wifi.list()` & `.connect()`
-Scans local airspace and connects the Android hardware to an IoT Access Point (AP).
-
+<a name="clovebluetoothconnect"></a>
+#### `Clove.bluetooth.connect(address)`
+Establishes an active RFCOMM transmission line channel to a target legacy module.
+* **Arguments:** `address` *(String)* (Target hardware MAC identifier)
+* **Returns:** `Promise<void>`
 ```javascript
-async function connectToDeviceHotspot() {
+async function connectToSerialModule() {
   await window.Clove.ready();
-
-  if (!await window.Clove.wifi.isEnabled()) {
-    await window.Clove.notification.alert("Please turn on Wi-Fi first.", "Notice", "OK");
-    return;
-  }
-
-  // Scan surrounding APs (One-time fetch)
-  const networks = await window.Clove.wifi.list();
-  const targetNet = networks.find(n => n.SSID.startsWith("ESP32_Setup_"));
-
-  if (targetNet) {
-    console.log(`Found device hotspot: ${targetNet.SSID}. Connecting...`);
-    await window.Clove.wifi.connect(targetNet.SSID, "secretpass123", "WPA", false);
-    console.log("Successfully bound to device local subnet.");
-  } else {
-    console.error("Target hardware AP not in range.");
-  }
-}
-```
-
----
-
-### 11. Wired Hardware USB Serial
-
-#### `Clove.usb.requestPermission()` / `.open()` / `.write()` / `.read()`
-Enables direct wired communication with FTDI, CP210X, or Arduino chips plugged via USB OTG.
-
-```javascript
-async function startUsbSerialLoop() {
-  await window.Clove.ready();
-
-  const usbConfig = {
-    baudRate: 115200,
-    dataBits: 8,
-    stopBits: 1,
-    parity: 0
-  };
-
-  // Request Android OTG hardware permission
-  await window.Clove.usb.requestPermission(usbConfig);
-  await window.Clove.usb.open(usbConfig);
-
-  // Setup Continuous Reader Loop
-  await window.Clove.usb.read((incomingBuffer) => {
-    const textDecoder = new TextDecoder("utf-8");
-    const incomingString = textDecoder.decode(incomingBuffer);
-    
-    // Append terminal logs
-    const terminal = document.getElementById("usb-terminal");
-    terminal.value += incomingString;
-    terminal.scrollTop = terminal.scrollHeight;
-  });
-
-  // Send startup command
-  await window.Clove.usb.write("START_DEBUG_OUTPUT\n");
-}
-```
-
----
-
-### 12. Native Camera Capture
-
-#### `Clove.camera.getPicture(options)`
-Launches the device's native camera viewfinder to capture inspection images.
-
-```javascript
-async function captureInspectionPhoto() {
-  await window.Clove.ready();
-
-  const camOptions = {
-    quality: 85,
-    destinationType: 0, // 0 = Base64 String, 1 = File Path
-    sourceType: 1       // 1 = Camera Viewfinder
-  };
-
+  const targetMac = "00:11:22:33:44:55";
   try {
-    const base64Image = await window.Clove.camera.getPicture(camOptions);
-    
-    // Render directly into the DOM
-    const imgElement = document.getElementById("inspection-preview");
-    imgElement.src = `data:image/jpeg;base64,${base64Image}`;
-    imgElement.style.display = "block";
+    await window.Clove.bluetooth.connect(targetMac);
+    console.log(`Persistent RFCOMM serial stream link set up cleanly to target: ${targetMac}`);
   } catch (err) {
-    console.log("User canceled camera viewfinder.", err);
+    console.error("Link assembly parameters failed to complete properly:", err);
   }
 }
 ```
 
 ---
 
-### 13. Spatial Geolocation
-
-#### One-Time GPS Fix vs. Continuous Asset Tracking
-Fetch precise satellite positioning coordinates for spatial mapping or telemetry geotagging.
-
+<a name="clovebluetoothdisconnect"></a>
+#### `Clove.bluetooth.disconnect()`
+Tears down active serial device pipeline tunnels.
+* **Arguments:** None
+* **Returns:** `Promise<void>`
 ```javascript
-// PATTERN A: One-Time Position Snapshot
-async function tagEventLocationOnce() {
+async function closeSerialConnection() {
   await window.Clove.ready();
-
-  const pos = await window.Clove.geolocation.getCurrentPosition({
-    enableHighAccuracy: true,
-    timeout: 5000
-  });
-
-  console.log(`Single GPS Snapshot: ${pos.coords.latitude}, ${pos.coords.longitude}`);
-  return pos.coords;
+  await window.Clove.bluetooth.disconnect();
+  console.log("RFCOMM data channel closed.");
 }
+```
 
-// PATTERN B: Continuous Asset Tracking (Live GPS Stream)
-let gpsWatchId = null;
+---
 
-async function startLiveGpsTracking() {
+<a name="clovebluetoothwrite"></a>
+#### `Clove.bluetooth.write(data)`
+Transmits raw operational strings down active classic serialization pathways.
+* **Arguments:** `data` *(String | ArrayBuffer | Uint8Array)*
+* **Returns:** `Promise<void>`
+```javascript
+async function sendSerialCommand() {
   await window.Clove.ready();
+  const commandText = "SYS_VAL_SET_MOTOR_RPM=4500\n";
+  await window.Clove.bluetooth.write(commandText);
+  console.log("String sequence dispatched across serial link channels.");
+}
+```
 
-  // Streams updated location continuously as the physical device moves
-  gpsWatchId = await window.Clove.geolocation.watchPosition((livePos) => {
-    const { latitude, longitude, speed } = livePos.coords;
-    
-    // Update live dashboard map marker
-    updateMapMarker(latitude, longitude);
-    document.getElementById("speedometer").innerText = `${(speed || 0).toFixed(1)} m/s`;
-  }, {
-    enableHighAccuracy: true
+---
+
+<a name="clovebluetoothread"></a>
+#### `Clove.bluetooth.read()`
+Pulls the current raw buffer string contents out of memory queues manually **(One-Time Read)**.
+* **Arguments:** None
+* **Returns:** `Promise<String>`
+```javascript
+async function readCurrentBufferSnapshot() {
+  await window.Clove.ready();
+  const immediateDataString = await window.Clove.bluetooth.read();
+  console.log("Immediate unformatted queue buffer dump data snapshot:", immediateDataString);
+}
+```
+
+---
+
+<a name="clovebluetoothreaduntil"></a>
+#### `Clove.bluetooth.readUntil(delimiter)`
+Pulls data from memory buffer queues manually, blocking until a specific validation sequence or line break is met **(One-Time Read)**.
+* **Arguments:** `delimiter` *(String)*
+* **Returns:** `Promise<String>`
+```javascript
+async function fetchSingleTelemetryPacket() {
+  await window.Clove.ready();
+  console.log("Waiting for single transmission line verification wrapper...");
+  const rawLineString = await window.Clove.bluetooth.readUntil("\n");
+  console.log("One-time parsed data row confirmed:", rawLineString.trim());
+}
+```
+
+---
+
+<a name="clovebluetoothsubscribe"></a>
+#### `Clove.bluetooth.subscribe(delimiter, callback)`
+Attaches an ongoing automated observation loop listener to incoming stream data blocks **(Continuous Stream)**.
+* **Arguments:** `delimiter` *(String)*, `callback` *(Function)* processing raw strings `(data) => void`
+* **Returns:** `Promise<void>`
+```javascript
+async function monitorContinuousSerialStream() {
+  await window.Clove.ready();
+  console.log("Registering continuous event stream listener block...");
+  await window.Clove.bluetooth.subscribe("\n", (incomingLine) => {
+    const dataString = incomingLine.trim();
+    console.log("Stream notification received:", dataString);
+    document.getElementById("live-spp-readout").innerText = dataString;
   });
 }
+```
 
-async function stopLiveGpsTracking() {
-  if (gpsWatchId !== null) {
-    await window.Clove.geolocation.clearWatch(gpsWatchId);
-    gpsWatchId = null;
-    console.log("GPS tracking loop stopped.");
+---
+
+<a name="clovebluetoothunsubscribe"></a>
+#### `Clove.bluetooth.unsubscribe()`
+Detaches automated stream parsing callback observation frameworks.
+* **Arguments:** None
+* **Returns:** `Promise<void>`
+```javascript
+async function stopContinuousSerialMonitoring() {
+  await window.Clove.ready();
+  await window.Clove.bluetooth.unsubscribe();
+  console.log("Continuous stream observer unlinked successfully.");
+}
+```
+
+---
+
+<a name="clovebluetoothisconnected"></a>
+#### `Clove.bluetooth.isConnected()`
+Assesses if an active operational link is maintained to a classic client accessory endpoint.
+* **Arguments:** None
+* **Returns:** `Promise<Boolean>`
+```javascript
+async function verifyConnectionState() {
+  await window.Clove.ready();
+  const linked = await window.Clove.bluetooth.isConnected();
+  console.log(`Active legacy target connection integrity verified: ${linked}`);
+}
+```
+
+---
+
+<a name="clovebluetoothisenabled"></a>
+#### `Clove.bluetooth.isEnabled()`
+Queries if the device's physical legacy Bluetooth adapter engine radio is turned on.
+* **Arguments:** None
+* **Returns:** `Promise<Boolean>`
+```javascript
+async function checkRadioAdapterState() {
+  await window.Clove.ready();
+  const adapterActive = await window.Clove.bluetooth.isEnabled();
+  if (!adapterActive) {
+    console.log("Device adapter radio requires state modifications.");
   }
 }
 ```
 
 ---
 
-### 14. MQTT Protocol Engine
-
-#### `Clove.mqtt.connect()` / `.publish()` / `.subscribe()`
-Connects directly to remote IoT message brokers (HiveMQ, AWS IoT, Mosquitto) natively over TCP/WebSockets.
-
+<a name="clovebluetoothenable"></a>
+#### `Clove.bluetooth.enable()`
+Triggers direct native host hardware adapter power state modification requests to activate the radio interface.
+* **Arguments:** None
+* **Returns:** `Promise<any>`
 ```javascript
-async function startMqttPipeline() {
+async function demandRadioActivation() {
   await window.Clove.ready();
+  console.log("Requesting platform adapter activation sequence guidelines...");
+  await window.Clove.bluetooth.enable();
+}
+```
 
-  // 1. Establish persistent broker connection
-  await window.Clove.mqtt.connect({
+---
+
+### Bluetooth Low Energy (GATT)
+
+<a name="cloveblescan"></a>
+#### `Clove.ble.scan(services, seconds)`
+Scans the local environment for advertising BLE peripherals.
+* **Arguments:** `services` *(Array<String>)* (Filter by service UUIDs, pass empty array `[]` for all), `seconds` *(Number)* (Scan duration)
+* **Returns:** `Promise<Array<Object>>` containing targets with `{ name: string, id: string, rssi: number, advertising: any }`
+```javascript
+async function discoveryLowEnergyNodes() {
+  await window.Clove.ready();
+  console.log("Scanning for Bluetooth Low Energy advertisement markers...");
+  const discoveredGattNodes = await window.Clove.ble.scan([], 5);
+  discoveredGattNodes.forEach(node => {
+    console.log(`Discovered BLE peripheral node: ${node.name || 'Unknown'} ID: ${node.id} Signal: ${node.rssi}dBm`);
+  });
+}
+```
+
+---
+
+<a name="cloveblestopscan"></a>
+#### `Clove.ble.stopScan()`
+Halts active environmental BLE radio scanning execution before the countdown timer finishes.
+* **Arguments:** None
+* **Returns:** `Promise<void>`
+```javascript
+async function emergencyHaltBleScan() {
+  await window.Clove.ready();
+  await window.Clove.ble.stopScan();
+  console.log("Active radio scanning sequence terminated.");
+}
+```
+
+---
+
+<a name="clovebleconnect"></a>
+#### `Clove.ble.connect(id)`
+Establishes a persistent connection route configuration pointing directly to a remote GATT server.
+* **Arguments:** `id` *(String)* (Target system identifier or MAC index)
+* **Returns:** `Promise<Object>` returning deep structural map objects listing discoverable services and characteristics descriptors.
+```javascript
+async function connectToGattServer() {
+  await window.Clove.ready();
+  const targetId = "F3:D2:C1:00:AA:BB";
+  try {
+    const topologyMap = await window.Clove.ble.connect(targetId);
+    console.log("GATT handshake successful. Structural services verified:", topologyMap.services);
+  } catch (err) {
+    console.error("GATT handshake routine failure:", err);
+  }
+}
+```
+
+---
+
+<a name="clovebledisconnect"></a>
+#### `Clove.ble.disconnect(id)`
+Tears down active persistent communication pathways linked to low energy GATT nodes.
+* **Arguments:** `id` *(String)*
+* **Returns:** `Promise<void>`
+```javascript
+async function terminateGattLink() {
+  await window.Clove.ready();
+  const targetId = "F3:D2:C1:00:AA:BB";
+  await window.Clove.ble.disconnect(targetId);
+  console.log("GATT pipeline disconnected cleanly.");
+}
+```
+
+---
+
+<a name="clovebleread"></a>
+#### `Clove.ble.read(id, serviceUuid, characteristicUuid)`
+Queries a specific characteristic descriptor value directly from a GATT server **(One-Time Read)**.
+* **Arguments:** `id` *(String)*, `serviceUuid` *(String)*, `characteristicUuid` *(String)*
+* **Returns:** `Promise<ArrayBuffer>` containing raw unformatted data chunks.
+```javascript
+async function fetchGattBatteryLevel() {
+  await window.Clove.ready();
+  const devId = "F3:D2:C1:00:AA:BB";
+  
+  const rawBytes = await window.Clove.ble.read(devId, "180F", "2A19");
+  const view = new DataView(rawBytes);
+  const batteryPct = view.getUint8(0);
+  console.log(`Snapshot read matching Battery Characteristic data metrics: ${batteryPct}%`);
+}
+```
+
+---
+
+<a name="cloveblewrite"></a>
+#### `Clove.ble.write(id, serviceUuid, characteristicUuid, data)`
+Transmits configuration data blocks downstream to specific characteristic profiles, expecting an confirmation response code back.
+* **Arguments:** `id` *(String)*, `serviceUuid` *(String)*, `characteristicUuid` *(String)*, `data` *(ArrayBuffer | Uint8Array)*
+* **Returns:** `Promise<void>`
+```javascript
+async function writeGattControlState() {
+  await window.Clove.ready();
+  const devId = "F3:D2:C1:00:AA:BB";
+  
+  const commandBytes = new Uint8Array([0x01, 0xFF]); // Custom control logic codes
+  await window.Clove.ble.write(devId, "180A", "2A57", commandBytes.buffer);
+  console.log("GATT command array package processed with server acknowledgment.");
+}
+```
+
+---
+
+<a name="cloveblewritewithoutresponse"></a>
+#### `Clove.ble.writeWithoutResponse(id, serviceUuid, characteristicUuid, data)`
+Transmits high-speed commands downstream to specific target parameters without requesting acknowledgment loops back from the client.
+* **Arguments:** `id` *(String)*, `serviceUuid` *(String)*, `characteristicUuid` *(String)*, `data` *(ArrayBuffer | Uint8Array)*
+* **Returns:** `Promise<void>`
+```javascript
+async function pushFastBleStreamUpdate() {
+  await window.Clove.ready();
+  const devId = "F3:D2:C1:00:AA:BB";
+  
+  const fastBytes = new Uint8Array([0x42, 0x00]);
+  await window.Clove.ble.writeWithoutResponse(devId, "180A", "2A57", fastBytes.buffer);
+  console.log("High-frequency pipeline burst sent unchecked.");
+}
+```
+
+---
+
+<a name="cloveblestartnotification"></a>
+#### `Clove.ble.startNotification(id, serviceUuid, characteristicUuid, callback)`
+Subscribes to characteristic value notifications for real-time GATT descriptor updates **(Continuous Stream)**.
+* **Arguments:** `id` *(String)*, `serviceUuid` *(String)*, `characteristicUuid` *(String)*, `callback` *(Function)* running data transformations structural routines via parameters `(rawBuffer) => void`
+* **Returns:** `Promise<void>`
+```javascript
+async function subscribeToLivePulseRate() {
+  await window.Clove.ready();
+  const devId = "F3:D2:C1:00:AA:BB";
+  
+  await window.Clove.ble.startNotification(devId, "180D", "2A37", (incomingBuffer) => {
+    const dataView = new DataView(incomingBuffer);
+    const pulseCount = dataView.getUint8(1); // Custom offset map
+    console.log(`Live telemetry pulse caught via continuous stream notification: ${pulseCount} BPM`);
+    document.getElementById("live-pulse-ui").innerText = `${pulseCount} BPM`;
+  });
+}
+```
+
+---
+
+<a name="cloveblestopnotification"></a>
+#### `Clove.ble.stopNotification(id, serviceUuid, characteristicUuid)`
+Tears down subscription routes listening to localized character modifications profiles.
+* **Arguments:** `id` *(String)*, `serviceUuid` *(String)*, `characteristicUuid` *(String)*
+* **Returns:** `Promise<void>`
+```javascript
+async function haltGattNotifications() {
+  await window.Clove.ready();
+  const devId = "F3:D2:C1:00:AA:BB";
+  await window.Clove.ble.stopNotification(devId, "180D", "2A37");
+  console.log("GATT modification update subscription routes disconnected cleanly.");
+}
+```
+
+---
+
+<a name="clovebleisenabled"></a>
+#### `Clove.ble.isEnabled()`
+Queries if the device's physical Bluetooth Low Energy adapter radio is turned on.
+* **Arguments:** None
+* **Returns:** `Promise<Boolean>`
+```javascript
+async function checkBleAdapterAvailability() {
+  await window.Clove.ready();
+  const bleActive = await window.Clove.ble.isEnabled();
+  console.log(`Hardware platform BLE engine active validation parameter: ${bleActive}`);
+}
+```
+
+---
+
+### Wi-Fi Adapter Linkages
+
+<a name="clovewifigetssid"></a>
+#### `Clove.wifi.getSSID()`
+Queries the naming assignment identifier of the local access point network link.
+* **Arguments:** None
+* **Returns:** `Promise<String>`
+```javascript
+async function readCurrentSsidSnapshot() {
+  await window.Clove.ready();
+  const activeSsid = await window.Clove.wifi.getSSID();
+  console.log(`Current established network SSID name trace configuration: ${activeSsid}`);
+}
+```
+
+---
+
+<a name="clovewifigetip"></a>
+#### `Clove.wifi.getIP()`
+Queries the device's assigned local IPv4 address.
+* **Arguments:** None
+* **Returns:** `Promise<String>`
+```javascript
+async function readLocalIP() {
+  await window.Clove.ready();
+  const assignedIp = await window.Clove.wifi.getIP();
+  console.log(`Local link transport IP address trace: ${assignedIp}`);
+}
+```
+
+---
+
+<a name="clovewifilist"></a>
+#### `Clove.wifi.list()`
+Scans surrounding airspace to map visible wireless access points **(One-Time Fetch)**.
+* **Arguments:** None
+* **Returns:** `Promise<Array<Object>>` listing elements containing `{ SSID: string, BSSID: string, level: number, capabilities: string }`
+```javascript
+async function scanLocalAps() {
+  await window.Clove.ready();
+  console.log("Scanning local airspace for wireless access networks...");
+  const structuralNetworksList = await window.Clove.wifi.list();
+  structuralNetworksList.forEach(net => {
+    console.log(`Discovered Network: ${net.SSID} Signal Level: ${net.level}dBm`);
+  });
+}
+```
+
+---
+
+<a name="clovewificonnect"></a>
+#### `Clove.wifi.connect(ssid, pass, algo, hid)`
+Forces network roaming handovers to connect the Android hardware to an external localized access point network.
+* **Arguments:** `ssid` *(String)*, `pass` *(String)*, `algo` *(String — e.g. "WPA" | "WEP")*, `hid` *(Boolean — Hidden tracking settings flag)*
+* **Returns:** `Promise<any>`
+```javascript
+async function bindToNodeHotspot() {
+  await window.Clove.ready();
+  try {
+    console.log("Attempting hardware Wi-Fi handover to target hotspot...");
+    await window.Clove.wifi.connect("Field_Node_AP_E9", "FactoryPass882", "WPA", false);
+    console.log("Subnet network configuration handshake complete.");
+  } catch (err) {
+    console.error("Handover request parameters rejected by adapter hardware layer:", err);
+  }
+}
+```
+
+---
+
+<a name="clovewifidisconnect"></a>
+#### `Clove.wifi.disconnect()`
+Termitances current interface link configurations safely from local target router gateways.
+* **Arguments:** None
+* **Returns:** `Promise<void>`
+```javascript
+async function severWifiConnection() {
+  await window.Clove.ready();
+  await window.Clove.wifi.disconnect();
+  console.log("Wireless station link interface dropped manually.");
+}
+```
+
+---
+
+<a name="clovewifiisenabled"></a>
+#### `Clove.wifi.isEnabled()`
+Queries if the device's physical Wi-Fi network interface card module is active.
+* **Arguments:** None
+* **Returns:** `Promise<Boolean>`
+```javascript
+async function checkWifiAdapterState() {
+  await window.Clove.ready();
+  const wifiHardwareActive = await window.Clove.wifi.isEnabled();
+  console.log(`Wi-Fi card activation confirmation verification flag: ${wifiHardwareActive}`);
+}
+```
+
+---
+
+### Wired Hardware USB Serial
+
+<a name="cloveusbrequestpermission"></a>
+#### `Clove.usb.requestPermission(options)`
+Requests explicit system device handling access codes targeting hardware accessories attached via USB OTG lines.
+* **Arguments:** `options` *(Object)* detailing interface configurations `{ baudRate: number, dataBits: number, stopBits: number, parity: number }`
+* **Returns:** `Promise<any>`
+```javascript
+async function authorizeUsbAccess() {
+  await window.Clove.ready();
+  const serialParameters = { baudRate: 9600, dataBits: 8, stopBits: 1, parity: 0 };
+  console.log("Requesting system permission handover flags for USB accessories...");
+  await window.Clove.usb.requestPermission(serialParameters);
+  console.log("USB accessory device permissions confirmed.");
+}
+```
+
+---
+
+<a name="cloveusbopen"></a>
+#### `Clove.usb.open(options)`
+Opens direct execution tunnels tracking standard hardware setups linked to physical USB serial interface boards.
+* **Arguments:** `options` *(Object)* detailing interface configurations `{ baudRate: number, dataBits: number, stopBits: number, parity: number }`
+* **Returns:** `Promise<any>`
+```javascript
+async function initializeUsbLink() {
+  await window.Clove.ready();
+  const serialParameters = { baudRate: 9600, dataBits: 8, stopBits: 1, parity: 0 };
+  await window.Clove.usb.open(serialParameters);
+  console.log("Wired OTG communication pathways mounted and initialized.");
+}
+```
+
+---
+
+<a name="cloveusbclose"></a>
+#### `Clove.usb.close()`
+Tears down active persistent communication pathways linked to physical USB interfaces.
+* **Arguments:** None
+* **Returns:** `Promise<void>`
+```javascript
+async function shutdownUsbPort() {
+  await window.Clove.ready();
+  await window.Clove.usb.close();
+  console.log("Wired OTG asset link deactivated cleanly.");
+}
+```
+
+---
+
+<a name="cloveusbwrite"></a>
+#### `Clove.usb.write(data)`
+Transmits raw operational strings straight across physical hardware lines.
+* **Arguments:** `data` *(String)*
+* **Returns:** `Promise<void>`
+```javascript
+async function pushUsbCommand() {
+  await window.Clove.ready();
+  const hardwareInstruction = "SYS_REBOOT_CONTROLLER_CHIP_NOW\n";
+  await window.Clove.usb.write(hardwareInstruction);
+  console.log("Instruction bytes processed by native USB port controllers.");
+}
+```
+
+---
+
+<a name="cloveusbread"></a>
+#### `Clove.usb.read(callback)`
+Attaches an execution handle loop listener to read characters arriving across physical hardware connections **(Continuous Stream)**.
+* **Arguments:** `callback` *(Function)* running payload transformations data structures `(rawBufferArray) => void`
+* **Returns:** `Promise<any>`
+```javascript
+async function readContinuousUsbStream() {
+  await window.Clove.ready();
+  console.log("Binding continuous event streaming callback logic to active USB interface port elements...");
+  await window.Clove.usb.read((incomingChunk) => {
+    const stringDecoder = new TextDecoder("utf-8");
+    const readableText = stringDecoder.decode(incomingChunk);
+    console.log("Wired USB character segment caught:", readableText);
+    document.getElementById("usb-console").value += readableText;
+  });
+}
+```
+
+---
+
+### Native Media Capture
+
+<a name="clovecameragetpicture"></a>
+#### `Clove.camera.getPicture(options)`
+Launches the device's native camera viewfinder frame layout to capture raw images.
+* **Arguments:** `options` *(Object)* containing `{ quality: number, destinationType: number, sourceType: number }`
+* **Returns:** `Promise<String>` containing base64 string lines data sets or local system file locations.
+```javascript
+async function runCameraCapture() {
+  await window.Clove.ready();
+  const photoConfig = { quality: 75, destinationType: 0, sourceType: 1 };
+  
+  try {
+    const capturedStringData = await window.Clove.camera.getPicture(photoConfig);
+    document.getElementById("node-preview-pane").src = `data:image/jpeg;base64,${capturedStringData}`;
+    console.log("Image data rendering updated accurately.");
+  } catch (err) {
+    console.log("User terminated camera layout context view sequence early.", err);
+  }
+}
+```
+
+---
+
+### Spatial Geolocation
+
+<a name="clovegeolocationgetcurrentposition"></a>
+#### `Clove.geolocation.getCurrentPosition(options)`
+Queries satellite position tracking engines for a single coordinate fix **(One-Time Snapshot)**.
+* **Arguments:** `options` *(Object)* matching standard specifications configuration patterns `{ enableHighAccuracy: boolean, timeout: number }`
+* **Returns:** `Promise<Object>` detailing position attributes containing `{ coords: { latitude: number, longitude: number, accuracy: number, altitude: number } }`
+```javascript
+async function sampleCurrentLocation() {
+  await window.Clove.ready();
+  const positioningParams = { enableHighAccuracy: true, timeout: 6000 };
+  
+  try {
+    const geographicFix = await window.Clove.geolocation.getCurrentPosition(positioningParams);
+    console.log(`GPS Location confirmation: Lat ${geographicFix.coords.latitude} Long ${geographicFix.coords.longitude}`);
+  } catch (err) {
+    console.error("GPS hardware timed out or turned off:", err);
+  }
+}
+```
+
+---
+
+<a name="clovegeolocationwatchposition"></a>
+#### `Clove.geolocation.watchPosition(callback, options)`
+Binds monitoring tracking handles to log spatial relocation vectors continuously as the device moves **(Continuous Stream)**.
+* **Arguments:** `callback` *(Function)* running spatial transformations routines `(positionData) => void`, `options` *(Object)*
+* **Returns:** `Promise<Number>` returning tracking identification tokens used for unlinking listeners later.
+```javascript
+let localTrackingToken = null;
+
+async function trackMovementContinuously() {
+  await window.Clove.ready();
+  console.log("Activating continuous geolocation tracking pipeline...");
+  
+  localTrackingToken = await window.Clove.geolocation.watchPosition((liveLocationPacket) => {
+    const lat = liveLocationPacket.coords.latitude;
+    const lon = liveLocationPacket.coords.longitude;
+    console.log(`Continuous tracking update: Lat ${lat} | Lon ${lon}`);
+    document.getElementById("live-coordinates-ui").innerText = `${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+  }, { enableHighAccuracy: true });
+}
+```
+
+---
+
+<a name="clovegeolocationclearwatch"></a>
+#### `Clove.geolocation.clearWatch(watchId)`
+Unlinks active stream observation frameworks listening to physical location variations parameters.
+* **Arguments:** `watchId` *(Number)* (Tracking confirmation token code)
+* **Returns:** `Promise<void>`
+```javascript
+async function haltAssetTracking() {
+  await window.Clove.ready();
+  if (localTrackingToken !== null) {
+    await window.Clove.geolocation.clearWatch(localTrackingToken);
+    localTrackingToken = null;
+    console.log("Continuous tracking loop stopped.");
+  }
+}
+```
+
+---
+
+### MQTT Protocol Engine
+
+<a name="clovemqttconnect"></a>
+#### `Clove.mqtt.connect(options)`
+Establishes data transmission tunnels targeting remote server message distribution hubs.
+* **Arguments:** `options` *(Object)* containing parameter keys like `{ host: string, port: number, clientId: string, username?: string, password?: string }`
+* **Returns:** `Promise<any>`
+```javascript
+async function linkToMqttBroker() {
+  await window.Clove.ready();
+  const brokerSettings = {
     host: "broker.hivemq.com",
     port: 1883,
-    clientId: "clove_client_" + Math.random().toString(16).substr(2, 8)
-  });
-
-  // 2. Subscribe to Continuous Incoming Message Stream
-  await window.Clove.mqtt.subscribe("factory/line1/alerts", (topic, payload) => {
-    console.log(`Continuous stream alert on [${topic}]:`, payload);
-    showRedAlertBanner(payload);
-  });
-
-  // 3. Publish a One-Time Command Message
-  const commandPayload = JSON.stringify({ action: "RESET_COUNTERS", operatorId: "OP-44" });
-  await window.Clove.mqtt.publish("factory/line1/control", commandPayload);
-  console.log("Control command dispatched.");
+    clientId: "clove_dashboard_client_0x991"
+  };
+  
+  try {
+    console.log("Initiating native MQTT link handshake parameters...");
+    await window.Clove.mqtt.connect(brokerSettings);
+    console.log("MQTT network tracking links constructed successfully.");
+  } catch (err) {
+    console.error("MQTT broker connection failure:", err);
+  }
 }
 ```
 
 ---
 
-### 15. 🤖 AI Developer Prompt Template
+<a name="clovemqttdisconnect"></a>
+#### `Clove.mqtt.disconnect()`
+Tears down persistent message delivery setups safely from target distribution tracking platforms.
+* **Arguments:** None
+* **Returns:** `Promise<void>`
+```javascript
+async function severMqttBrokerLink() {
+  await window.Clove.ready();
+  await window.Clove.mqtt.disconnect();
+  console.log("MQTT network transmission pipes deactivated cleanly.");
+}
+```
+
+---
+
+<a name="clovemqttpublish"></a>
+#### `Clove.mqtt.publish(topic, payload, options)`
+Publishes data records downstream onto explicit tracking topic parameters.
+* **Arguments:** `topic` *(String)*, `payload` *(String)*, `options` *(Object — Optional settings block e.g., `{ qos: number, retain: boolean }`)*
+* **Returns:** `Promise<any>`
+```javascript
+async function broadcastSensorMetrics() {
+  await window.Clove.ready();
+  const alertTopic = "factory/assembly/line_1";
+  const monitoringData = JSON.stringify({ state: "operational", conveyorSpeed: "nominal" });
+  
+  await window.Clove.mqtt.publish(alertTopic, monitoringData, { qos: 1 });
+  console.log("Payload data set dispatched across MQTT network topic targets.");
+}
+```
+
+---
+
+<a name="clovemqttsubscribe"></a>
+#### `Clove.mqtt.subscribe(topic, callback)`
+Attaches event observation listeners to specific incoming communication channels **(Continuous Stream)**.
+* **Arguments:** `topic` *(String)*, `callback` *(Function)* running incoming data string actions mapping loops `(topic, payload) => void`
+* **Returns:** `Promise<any>`
+```javascript
+async function listenToGlobalAlerts() {
+  await window.Clove.ready();
+  const targetChannel = "factory/alarms/+/critical";
+  
+  console.log(`Subscribing to continuous channel messages stream on: ${targetChannel}`);
+  await window.Clove.mqtt.subscribe(targetChannel, (topicName, incomingMessageText) => {
+    console.log(`Continuous message caught on [${topicName}]:`, incomingMessageText);
+    document.getElementById("live-mqtt-alert").innerText = incomingMessageText;
+  });
+}
+```
+
+---
+
+<a name="clovemqttunsubscribe"></a>
+#### `Clove.mqtt.unsubscribe(topic)`
+Removes subscription tracking profiles from designated broker paths.
+* **Arguments:** `topic` *(String)*
+* **Returns:** `Promise<any>`
+```javascript
+async function dropChannelSubscription() {
+  await window.Clove.ready();
+  const staleChannel = "factory/alarms/+/critical";
+  await window.Clove.mqtt.unsubscribe(staleChannel);
+  console.log("MQTT topic observation framework unlinked successfully.");
+}
+```
+
+---
+
+## 🤖 AI Developer Prompt Template
 
 Copy and paste the prompt block below into any Large Language Model (ChatGPT, Claude, Gemini) along with your dashboard UI idea. This sets up the AI with the complete context required to generate flawless vanilla HTML/CSS/JS code that integrates directly with the Clove framework.
 
@@ -567,15 +1358,15 @@ The runtime eliminates standard browser CORS restrictions by routing network req
 * Device Info & Network: `Clove.device.info()`, `Clove.network.status()`
 * Persistent Storage: `Clove.storage.get(k)`, `Clove.storage.set(k, v)`, `Clove.storage.remove(k)`, `Clove.storage.clear()`
 * Local Filesystem: `Clove.file.write(path, data)`, `Clove.file.read(path, {mode})`, `Clove.file.exists(path)`, `Clove.file.remove(path)`, `Clove.file.open(path, mime)`
-* Proxy HTTP Networking: `Clove.http.get(url, opts)`, `Clove.http.post(url, data, opts)`, `Clove.http.setHeader(host, header, val)`, `Clove.http.setDataSerializer(format)`
-* UI Feedback: `Clove.notification.alert(m, t, b)`, `Clove.notification.confirm(m, t, [b])`, `Clove.notification.prompt()`, `Clove.notification.vibrate(ms)`
-* Classic Serial SPP: `Clove.bluetooth.list()`, `Clove.bluetooth.connect(addr)`, `Clove.bluetooth.write(str)`, `Clove.bluetooth.readUntil(delim)`, `Clove.bluetooth.subscribe(delim, cb)`, `Clove.bluetooth.disconnect()`
-* Low-Energy GATT BLE: `Clove.ble.scan(services, secs)`, `Clove.ble.connect(id)`, `Clove.ble.read(id, s, c)`, `Clove.ble.write(id, s, c, buf)`, `Clove.ble.startNotification(id, s, c, cb)`
-* Wi-Fi Management: `Clove.wifi.list()`, `Clove.wifi.connect(ssid, pass, algo)`, `Clove.wifi.isEnabled()`
+* Proxy HTTP Networking: `Clove.http.get(url, opts)`, `Clove.http.post(url, data, opts)`, `Clove.http.put(url, data, opts)`, `Clove.http.patch(url, data, opts)`, `Clove.http.delete(url, opts)`, `Clove.http.setHeader(host, header, val)`, `Clove.http.setDataSerializer(format)`
+* UI Feedback: `Clove.notification.alert(m, t, b)`, `Clove.notification.confirm(m, t, [b])`, `Clove.notification.prompt()`, `Clove.notification.beep(n)`, `Clove.notification.vibrate(ms)`
+* Classic Serial SPP: `Clove.bluetooth.list()`, `Clove.bluetooth.discoverUnpaired()`, `Clove.bluetooth.connect(addr)`, `Clove.bluetooth.write(str)`, `Clove.bluetooth.read()`, `Clove.bluetooth.readUntil(delim)`, `Clove.bluetooth.subscribe(delim, cb)`, `Clove.bluetooth.unsubscribe()`, `Clove.bluetooth.isConnected()`, `Clove.bluetooth.isEnabled()`, `Clove.bluetooth.enable()`, `Clove.bluetooth.disconnect()`
+* Low-Energy GATT BLE: `Clove.ble.scan(services, secs)`, `Clove.ble.stopScan()`, `Clove.ble.connect(id)`, `Clove.ble.disconnect(id)`, `Clove.ble.read(id, s, c)`, `Clove.ble.write(id, s, c, buf)`, `Clove.ble.writeWithoutResponse(id, s, c, buf)`, `Clove.ble.startNotification(id, s, c, cb)`, `Clove.ble.stopNotification(id, s, c)`, `Clove.ble.isEnabled()`
+* Wi-Fi Management: `Clove.wifi.getSSID()`, `Clove.wifi.getIP()`, `Clove.wifi.list()`, `Clove.wifi.connect(ssid, pass, algo, hid)`, `Clove.wifi.disconnect()`, `Clove.wifi.isEnabled()`
 * Wired OTG USB: `Clove.usb.requestPermission(opts)`, `Clove.usb.open(opts)`, `Clove.usb.write(str)`, `Clove.usb.read(cb)`, `Clove.usb.close()`
 * Camera: `Clove.camera.getPicture(opts)`
 * Geolocation: `Clove.geolocation.getCurrentPosition(opts)`, `Clove.geolocation.watchPosition(cb, opts)`, `Clove.geolocation.clearWatch(id)`
-* MQTT Messaging: `Clove.mqtt.connect(opts)`, `Clove.mqtt.publish(topic, msg)`, `Clove.mqtt.subscribe(topic, cb)`
+* MQTT Messaging: `Clove.mqtt.connect(opts)`, `Clove.mqtt.publish(topic, msg, opts)`, `Clove.mqtt.subscribe(topic, cb)`, `Clove.mqtt.unsubscribe(topic)`, `Clove.mqtt.disconnect()`
 
 Acknowledge these API parameters and constraints, and generate the complete code suite (HTML/CSS/JS) for my specific dashboard request described below.
 ```
