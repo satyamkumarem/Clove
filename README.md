@@ -1353,20 +1353,102 @@ The runtime eliminates standard browser CORS restrictions by routing network req
 4. Distinguish clearly between ONE-TIME DATA READS (e.g., `device.info()`, `ble.read()`, `bluetooth.readUntil()`, `geolocation.getCurrentPosition()`) and CONTINUOUS DATA STREAMS (e.g., `connectIoT()`, `bluetooth.subscribe()`, `ble.startNotification()`, `geolocation.watchPosition()`).
 5. NEVER mention or reference "Cordova" or any third-party wrapper plugins.
 
-### COMPLETE GLOBAL API REFERENCE:
-* Core: `Clove.ready()`, `Clove.connectIoT({type, target, serviceUuid, characteristicUuid, delimiter, pollInterval}, callback)`
-* Device Info & Network: `Clove.device.info()`, `Clove.network.status()`
-* Persistent Storage: `Clove.storage.get(k)`, `Clove.storage.set(k, v)`, `Clove.storage.remove(k)`, `Clove.storage.clear()`
-* Local Filesystem: `Clove.file.write(path, data)`, `Clove.file.read(path, {mode})`, `Clove.file.exists(path)`, `Clove.file.remove(path)`, `Clove.file.open(path, mime)`
-* Proxy HTTP Networking: `Clove.http.get(url, opts)`, `Clove.http.post(url, data, opts)`, `Clove.http.put(url, data, opts)`, `Clove.http.patch(url, data, opts)`, `Clove.http.delete(url, opts)`, `Clove.http.setHeader(host, header, val)`, `Clove.http.setDataSerializer(format)`
-* UI Feedback: `Clove.notification.alert(m, t, b)`, `Clove.notification.confirm(m, t, [b])`, `Clove.notification.prompt()`, `Clove.notification.beep(n)`, `Clove.notification.vibrate(ms)`
-* Classic Serial SPP: `Clove.bluetooth.list()`, `Clove.bluetooth.discoverUnpaired()`, `Clove.bluetooth.connect(addr)`, `Clove.bluetooth.write(str)`, `Clove.bluetooth.read()`, `Clove.bluetooth.readUntil(delim)`, `Clove.bluetooth.subscribe(delim, cb)`, `Clove.bluetooth.unsubscribe()`, `Clove.bluetooth.isConnected()`, `Clove.bluetooth.isEnabled()`, `Clove.bluetooth.enable()`, `Clove.bluetooth.disconnect()`
-* Low-Energy GATT BLE: `Clove.ble.scan(services, secs)`, `Clove.ble.stopScan()`, `Clove.ble.connect(id)`, `Clove.ble.disconnect(id)`, `Clove.ble.read(id, s, c)`, `Clove.ble.write(id, s, c, buf)`, `Clove.ble.writeWithoutResponse(id, s, c, buf)`, `Clove.ble.startNotification(id, s, c, cb)`, `Clove.ble.stopNotification(id, s, c)`, `Clove.ble.isEnabled()`
-* Wi-Fi Management: `Clove.wifi.getSSID()`, `Clove.wifi.getIP()`, `Clove.wifi.list()`, `Clove.wifi.connect(ssid, pass, algo, hid)`, `Clove.wifi.disconnect()`, `Clove.wifi.isEnabled()`
-* Wired OTG USB: `Clove.usb.requestPermission(opts)`, `Clove.usb.open(opts)`, `Clove.usb.write(str)`, `Clove.usb.read(cb)`, `Clove.usb.close()`
-* Camera: `Clove.camera.getPicture(opts)`
-* Geolocation: `Clove.geolocation.getCurrentPosition(opts)`, `Clove.geolocation.watchPosition(cb, opts)`, `Clove.geolocation.clearWatch(id)`
-* MQTT Messaging: `Clove.mqtt.connect(opts)`, `Clove.mqtt.publish(topic, msg, opts)`, `Clove.mqtt.subscribe(topic, cb)`, `Clove.mqtt.unsubscribe(topic)`, `Clove.mqtt.disconnect()`
+### COMPLETE GLOBAL API REFERENCE & METHOD SIGNATURES:
 
-Acknowledge these API parameters and constraints, and generate the complete code suite (HTML/CSS/JS) for my specific dashboard request described below.
+#### 1. Core & Initialization
+* `Clove.ready(): Promise<void>` -> Blocks script execution until the native bridge is fully active.
+* `Clove.connectIoT(config: {type: 'ble'|'bluetooth'|'usb'|'mqtt'|'http', target: string, serviceUuid?: string, characteristicUuid?: string, delimiter?: string, pollInterval?: number}, callback: (data: string) => void): Promise<void>` -> Initiates high-level micro-pipelines. Callback handles data updates continuously.
+
+#### 2. Device & Network Diagnostics
+* `Clove.device.info(): Promise<{ manufacturer: string, model: string, platform: string, version: string, uuid: string }>`
+* `Clove.network.status(): Promise<{ online: boolean, type: string }>`
+
+#### 3. Persistent State Storage
+* `Clove.storage.get(key: string): Promise<any>`
+* `Clove.storage.set(key: string, value: any): Promise<void>` -> Automatically serializes arrays and objects to JSON.
+* `Clove.storage.remove(key: string): Promise<void>`
+* `Clove.storage.clear(): Promise<void>`
+
+#### 4. Sandboxed File System
+* `Clove.file.write(path: string, data: string | Object): Promise<any>`
+* `Clove.file.read(path: string, options?: { mode: 'text' | 'json' }): Promise<any>`
+* `Clove.file.exists(path: string): Promise<boolean>`
+* `Clove.file.remove(path: string): Promise<any>`
+* `Clove.file.open(path: string, mimeType: string): Promise<any>` -> Triggers native system intent viewing window handler.
+* `Clove.file.getAssetURL(path: string): Promise<string>` -> Converts sandboxed file paths into a web-safe URL string for visual element binding.
+
+#### 5. Enterprise Proxy HTTP Networking
+* `Clove.http.request(options: { method: 'GET'|'POST'|'PUT'|'PATCH'|'DELETE', url: string, data?: any, headers?: any }): Promise<{ ok: boolean, status: number, body: any, headers: any }>`
+* `Clove.http.get(url: string, options?: any): Promise<{ ok: boolean, status: number, body: any, headers: any }>`
+* `Clove.http.post(url: string, data: any, options?: any): Promise<{ ok: boolean, status: number, body: any, headers: any }>`
+* `Clove.http.put(url: string, data: any, options?: any): Promise<{ ok: boolean, status: number, body: any, headers: any }>`
+* `Clove.http.patch(url: string, data: any, options?: any): Promise<{ ok: boolean, status: number, body: any, headers: any }>`
+* `Clove.http.delete(url: string, options?: any): Promise<{ ok: boolean, status: number, body: any, headers: any }>`
+* `Clove.http.setHeader(host: string, headerName: string, value: string): Promise<void>` -> Maps default header parameters to a specified host context.
+* `Clove.http.setDataSerializer(serializer: 'json' | 'urlencoded' | 'utf8' | 'multipart'): Promise<void>`
+
+#### 6. User Experience & Native Feedback
+* `Clove.notification.alert(msg: string, title: string, buttonLabel: string): Promise<void>`
+* `Clove.notification.confirm(msg: string, title: string, buttonLabels: string[]): Promise<number>` -> Returns 1-based index matching selected button layout mapping.
+* `Clove.notification.prompt(msg: string, title: string, buttonLabels: string[], defaultText: string): Promise<{ buttonIndex: number, input1: string }>` -> Maps button triggers alongside string configurations text input fields parameters.
+* `Clove.notification.beep(times: number): Promise<void>`
+* `Clove.notification.vibrate(ms: number): Promise<void>`
+
+#### 7. Bluetooth Classic Serial (SPP)
+* `Clove.bluetooth.list(): Promise<Array<{ name: string, address: string, id: string, class: number }>>` -> Lists paired legacy classic device profiles.
+* `Clove.bluetooth.discoverUnpaired(): Promise<Array<{ name: string, address: string }>>`
+* `Clove.bluetooth.connect(address: string): Promise<void>` -> Initiates communication link mapping over standard RFCOMM channels.
+* `Clove.bluetooth.write(data: string | ArrayBuffer | Uint8Array): Promise<void>`
+* `Clove.bluetooth.read(): Promise<string>` -> One-time request reading whatever unformatted queue text is present in the buffer at that millisecond.
+* `Clove.bluetooth.readUntil(delimiter: string): Promise<string>` -> One-time request reading data blocking execution loops until delimiter configuration matches.
+* `Clove.bluetooth.subscribe(delimiter: string, callback: (data: string) => void): Promise<void>` -> CONTINUOUS DATA STREAM. Fires automatically on matching delimiter tokens.
+* `Clove.bluetooth.unsubscribe(): Promise<void>`
+* `Clove.bluetooth.isConnected(): Promise<boolean>`
+* `Clove.bluetooth.isEnabled(): Promise<boolean>`
+* `Clove.bluetooth.enable(): Promise<any>` -> Prompts native OS platform dialog handling requests to turn on system adapter radio elements.
+* `Clove.bluetooth.disconnect(): Promise<void>`
+
+#### 8. Bluetooth Low-Energy (GATT)
+* `Clove.ble.scan(services: string[], durationSeconds: number): Promise<Array<{ name: string, id: string, rssi: number, advertising: any }>>`
+* `Clove.ble.stopScan(): Promise<void>`
+* `Clove.ble.connect(id: string): Promise<{ services: string[], characteristics: Array<{ service: string, characteristic: string, properties: string[] }> }>`
+* `Clove.ble.disconnect(id: string): Promise<void>`
+* `Clove.ble.read(id: string, serviceUuid: string, characteristicUuid: string): Promise<ArrayBuffer>` -> One-time request parameters read.
+* `Clove.ble.write(id: string, serviceUuid: string, characteristicUuid: string, data: ArrayBuffer): Promise<void>` -> Expects device acknowledgment feedback.
+* `Clove.ble.writeWithoutResponse(id: string, serviceUuid: string, characteristicUuid: string, data: ArrayBuffer): Promise<void>` -> High speed write, skips verification tracking loop states.
+* `Clove.ble.startNotification(id: string, serviceUuid: string, characteristicUuid: string, callback: (data: ArrayBuffer) => void): Promise<void>` -> CONTINUOUS DATA STREAM.
+* `Clove.ble.stopNotification(id: string, serviceUuid: string, characteristicUuid: string): Promise<void>`
+* `Clove.ble.isEnabled(): Promise<boolean>`
+
+#### 9. Wi-Fi Adapter Linkages
+* `Clove.wifi.getSSID(): Promise<string>`
+* `Clove.wifi.getIP(): Promise<string>`
+* `Clove.wifi.list(): Promise<Array<{ SSID: string, BSSID: string, level: number, capabilities: string }>>` -> Returns list layout details surrounding current area airspace hotspots maps.
+* `Clove.wifi.connect(ssid: string, password: string, algorithm: 'WPA'|'WEP'|'NONE', isHidden: boolean): Promise<any>`
+* `Clove.wifi.disconnect(): Promise<void>`
+* `Clove.wifi.isEnabled(): Promise<boolean>`
+
+#### 10. Wired OTG USB Serial
+* `Clove.usb.requestPermission(options: { baudRate: number, dataBits: number, stopBits: number, parity: number }): Promise<any>`
+* `Clove.usb.open(options: { baudRate: number, dataBits: number, stopBits: number, parity: number }): Promise<any>`
+* `Clove.usb.write(data: string): Promise<void>`
+* `Clove.usb.read(callback: (data: Uint8Array) => void): Promise<any>` -> CONTINUOUS DATA STREAM. Loop handler reading incoming wired hardware buffer states.
+* `Clove.usb.close(): Promise<void>`
+
+#### 11. Native Media Capture
+* `Clove.camera.getPicture(options: { quality: number, destinationType: 0 | 1, sourceType: 1 }): Promise<string>` -> destinationType 0 returns raw base64 string, 1 returns system storage local file path.
+
+#### 12. Spatial Geolocation
+* `Clove.geolocation.getCurrentPosition(options?: { enableHighAccuracy?: boolean, timeout?: number }): Promise<{ coords: { latitude: number, longitude: number, accuracy: number, altitude: number, speed: number | null } }>` -> One-time fix snapshot tracking mapping logic.
+* `Clove.geolocation.watchPosition(callback: (position: { coords: { latitude: number, longitude: number, accuracy: number, speed: number | null } }) => void, options?: { enableHighAccuracy?: boolean }): Promise<number>` -> CONTINUOUS DATA STREAM. Returns watchId token metrics.
+* `Clove.geolocation.clearWatch(watchId: number): Promise<void>`
+
+#### 13. MQTT Protocol Messaging Engine
+* `Clove.mqtt.connect(options: { host: string, port: number, clientId: string, username?: string, password?: string }): Promise<any>`
+* `Clove.mqtt.publish(topic: string, message: string, options?: { qos?: 0 | 1 | 2, retain?: boolean }): Promise<any>`
+* `Clove.mqtt.subscribe(topic: string, callback: (topic: string, payload: string) => void): Promise<any>` -> CONTINUOUS DATA STREAM. Incoming message listener block.
+* `Clove.mqtt.unsubscribe(topic: string): Promise<any>`
+* `Clove.mqtt.disconnect(): Promise<void>`
+
+Acknowledge these exact API definitions, parameters, and return type definitions, and generate the complete code suite (HTML/CSS/JS) for my specific dashboard request described below.
 ```
