@@ -28,7 +28,6 @@ Clove is an Android framework that lets you build native mobile apps using simpl
 - **Plug-and-Play Hardware Connectivity:** Connecting your app interface to embedded systems is incredibly easy. Clove includes ready-to-use modules that handle the low-level communication logic for Bluetooth Classic, BLE, Wi-Fi, and USB serial devices, so you can safely send and stream data with a few lines of clean JavaScript.
 <br />
 
-
 ## Installation & Setup
 
 Steps to install Clove application on your device and launch your custom dashboard using these steps:
@@ -40,6 +39,7 @@ Steps to install Clove application on your device and launch your custom dashboa
 
 **Updating or Swapping Dashboards:** Because Clove adopts your dashboard permanently, you can clear it out to upload a new design by either clearing the app's data (`Settings > Apps > Clove > Storage > Clear Data`) or by completely reinstalling the application.
 <br />
+
 
 ## Predefined Methods
 
