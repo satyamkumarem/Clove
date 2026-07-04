@@ -137,7 +137,7 @@ The runtime eliminates standard browser CORS restrictions by routing network req
 2. Every hardware interaction must use `async/await` syntax wrapped in robust `try/catch` blocks.
 3. Always await framework initialization before running native functions: `await window.Clove.ready();`.
 4. Distinguish clearly between ONE-TIME DATA READS (e.g., `device.info()`, `ble.read()`, `bluetooth.readUntil()`, `geolocation.getCurrentPosition()`) and CONTINUOUS DATA STREAMS (e.g., `connectIoT()`, `bluetooth.subscribe()`, `ble.startNotification()`, `geolocation.watchPosition()`).
-5. NEVER mention or reference "Cordova" or any third-party wrapper plugins.
+5. NEVER mention or reference any third-party wrapper plugins.
 
 ### COMPLETE GLOBAL API REFERENCE & METHOD SIGNATURES:
 
