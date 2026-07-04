@@ -17,7 +17,6 @@
 		<a href="https://euome.com"><img src="https://github.com/user-attachments/assets/0fcfb862-98a8-4680-aaf2-4b191719c54d" alt="Powered by Euome" height="40" /></a>
 	</p>
 </div>
-<br />
 
 ## About
 
