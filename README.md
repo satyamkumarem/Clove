@@ -16,19 +16,21 @@
 	</p>
 </div>
 
-## Clove: Composable Layer for Operating Various Embedded Systems
-### Developer Interface & API Reference Guide
+## About
+
+The **Clove Android Application** is a client-side runtime environment engineered for IoT interaction, data visualization, and hardware control. Instead of relying on rigid, pre-built dashboard architectures, Clove provides an open-ended presentation layer sandbox.
+
+- **Custom UI Provisioning:** Developers bundle standard web assets (`index.html`, `styles.css`, JS modules, and static graphics) into a `.zip` file and upload it directly to the Clove app.
+- **Native Abstraction Virtualization:** The app renders these assets inside a secure sandbox viewport.
+- **Zero Native Code Required:** The runtime intercepts execution requests via the global window bridge (`window.Clove`), allowing your JavaScript to natively control hardware sensors, Bluetooth, USB serial, and file systems without writing native Android code.
+
+## Developer Interface & API Reference Guide
 
 ---
 
 ## 📖 Application Overview
 
-The **Clove Android Application** is a client-side runtime environment engineered for IoT interaction, data visualization, and hardware control. Instead of relying on rigid, pre-built dashboard architectures, Clove provides an open-ended presentation layer sandbox.
 
-### How the Ecosystem Works:
-1. **Custom UI Provisioning:** Developers bundle standard web assets (`index.html`, `styles.css`, JS modules, and static graphics) into a `.zip` file and upload it directly to the Clove app.
-2. **Native Abstraction Virtualization:** The app renders these assets inside a secure sandbox viewport.
-3. **Zero Native Code Required:** The runtime intercepts execution requests via the global window bridge (`window.Clove`), allowing your JavaScript to natively control hardware sensors, Bluetooth, USB serial, and file systems without writing native Android code.
 
 ---
 
