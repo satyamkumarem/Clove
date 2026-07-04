@@ -6,7 +6,7 @@
   <p>
     <p>
 		<a href="https://github.com/satyamkumarem/Clove/releases"><img src="https://img.shields.io/github/v/release/satyamkumarem/Clove?color=5865F2&label=version" alt="version" /></a>
-        <a href="https://github.com/satyamkumarem/Clove/releases"><img src="https://img.shields.io/badge/downloads-0_total-2ea44f"/></a>
+        <a href="https://github.com/satyamkumarem/Clove/releases"><img src="https://img.shields.io/badge/downloads-0_total-2ea44f?color=5865F2"/></a>
 	    <a href="https://github.com/satyamkumarem/Clove"><img src="https://img.shields.io/badge/tests-passing-2ea44f?logo=github&logoColor=ffffff" alt="tests" /></a>
 	    <a href="https://github.com/satyamkumarem/Clove/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/satyamkumarem/Clove?logo=github&logoColor=ffffff" /></a>
       <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform: Android" />
