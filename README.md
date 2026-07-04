@@ -22,7 +22,7 @@
 
 Clove is an Android framework that lets you build native mobile apps using simple web code—just HTML, CSS, and JavaScript. Instead of spending months learning complex Android development with Java or Kotlin, you just build your custom interface like a basic website, load it into Clove, and the framework automatically sets up the backend and runs it like a native application. It even handles native networking by removing annoying browser blocks like CORS (which usually stop web code from talking directly to external hardware or local servers). It's an ideal environment for testing user interfaces and controlling embedded systems, with an upcoming feature that will let you bundle your final project into a standalone `.apk` file you can distribute.
 
-### Core Features
+#### Core Features
 - **AI-Assisted Dashboard Building:** You don't need to be an expert developer to get started. Clove provides a pre-configured prompt template that you can copy and paste into an AI assistant, allowing absolute beginners to generate fully functional dashboards just by describing what they need in plain English.
 - **Plug-and-Play Hardware Connectivity:** Connecting your app interface to embedded systems is incredibly easy. Clove includes ready-to-use modules that handle the low-level communication logic for Bluetooth Classic, BLE, Wi-Fi, and USB serial devices, so you can safely send and stream data with a few lines of clean JavaScript.
 
